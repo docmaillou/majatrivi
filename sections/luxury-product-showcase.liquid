@@ -1,0 +1,567 @@
+{% liquid
+  assign collection = collections[section.settings.collection]
+  assign products_to_show = section.settings.products_to_show
+  assign show_description = section.settings.show_description
+  assign layout_style = section.settings.layout_style
+%}
+
+<section 
+  id="LuxuryShowcase-{{ section.id }}" 
+  class="luxury-showcase color-{{ section.settings.color_scheme }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="luxury-showcase__container">
+    <div class="luxury-showcase__header">
+      {% if section.settings.heading != blank %}
+        <h2 class="luxury-showcase__heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+      
+      {% if section.settings.subheading != blank %}
+        <p class="luxury-showcase__subheading">{{ section.settings.subheading }}</p>
+      {% endif %}
+    </div>
+    
+    <div class="luxury-showcase__grid luxury-showcase__grid--{{ layout_style }}">
+      {% if collection != blank and collection.products.size > 0 %}
+        {% for product in collection.products limit: products_to_show %}
+          <div class="luxury-showcase__item" data-aos="fade-up" data-aos-delay="{{ forloop.index0 | times: 100 }}">
+            <div class="luxury-showcase__product-card">
+              <div class="luxury-showcase__image-wrapper">
+                <a href="{{ product.url }}" class="luxury-showcase__link">
+                  {% if product.featured_media != blank %}
+                    {{ product.featured_media | image_url: width: 800 | image_tag: 
+                      alt: product.featured_media.alt | default: product.title,
+                      class: 'luxury-showcase__image luxury-showcase__image--primary',
+                      loading: 'lazy'
+                    }}
+                    
+                    {% if product.media[1] != blank %}
+                      {{ product.media[1] | image_url: width: 800 | image_tag: 
+                        alt: product.media[1].alt | default: product.title,
+                        class: 'luxury-showcase__image luxury-showcase__image--hover',
+                        loading: 'lazy'
+                      }}
+                    {% endif %}
+                  {% else %}
+                    {{ 'product-1' | placeholder_svg_tag: 'luxury-showcase__placeholder' }}
+                  {% endif %}
+                </a>
+                
+                {% if product.available %}
+                  <div class="luxury-showcase__quick-add">
+                    <button type="button" class="luxury-showcase__quick-add-btn" data-product-id="{{ product.id }}">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      Quick Add
+                    </button>
+                  </div>
+                {% endif %}
+              </div>
+              
+              <div class="luxury-showcase__content">
+                <h3 class="luxury-showcase__product-title">
+                  <a href="{{ product.url }}">{{ product.title }}</a>
+                </h3>
+                
+                {% if show_description and product.description != blank %}
+                  <div class="luxury-showcase__product-description">
+                    {{ product.description | strip_html | truncate: 120 }}
+                  </div>
+                {% endif %}
+                
+                <div class="luxury-showcase__price-wrapper">
+                  {% if product.compare_at_price > product.price %}
+                    <span class="luxury-showcase__price luxury-showcase__price--sale">
+                      {{ product.price | money }}
+                    </span>
+                    <span class="luxury-showcase__price luxury-showcase__price--compare">
+                      {{ product.compare_at_price | money }}
+                    </span>
+                  {% else %}
+                    <span class="luxury-showcase__price">
+                      {% if product.price_varies %}
+                        From {{ product.price_min | money }}
+                      {% else %}
+                        {{ product.price | money }}
+                      {% endif %}
+                    </span>
+                  {% endif %}
+                </div>
+                
+                {% if product.variants.size > 1 %}
+                  <div class="luxury-showcase__variants">
+                    {% for option in product.options_with_values limit: 1 %}
+                      {% if option.name == 'Color' %}
+                        <div class="luxury-showcase__color-swatches">
+                          {% for value in option.values limit: 4 %}
+                            <div class="luxury-showcase__color-swatch" style="background-color: {{ value | downcase }}"></div>
+                          {% endfor %}
+                          {% if option.values.size > 4 %}
+                            <span class="luxury-showcase__more-colors">+{{ option.values.size | minus: 4 }}</span>
+                          {% endif %}
+                        </div>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        {% comment %} Placeholder products {% endcomment %}
+        {% for i in (1..products_to_show) %}
+          <div class="luxury-showcase__item">
+            <div class="luxury-showcase__product-card">
+              <div class="luxury-showcase__image-wrapper">
+                {{ 'product-1' | placeholder_svg_tag: 'luxury-showcase__placeholder' }}
+              </div>
+              <div class="luxury-showcase__content">
+                <h3 class="luxury-showcase__product-title">Sample Product {{ i }}</h3>
+                <div class="luxury-showcase__price-wrapper">
+                  <span class="luxury-showcase__price">$00.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+    
+    {% if section.settings.button_text != blank and section.settings.button_link != blank %}
+      <div class="luxury-showcase__footer">
+        <a href="{{ section.settings.button_link }}" class="luxury-showcase__view-all">
+          {{ section.settings.button_text }}
+          <svg class="luxury-showcase__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 1L15 8L8 15M15 8H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .luxury-showcase {
+    padding: 5rem 0;
+    background: var(--color-background);
+  }
+  
+  .luxury-showcase__container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  
+  .luxury-showcase__header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  
+  .luxury-showcase__heading {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin: 0 0 1rem 0;
+    text-transform: lowercase;
+    font-family: var(--font-primary--family);
+    color: var(--color-foreground);
+  }
+  
+  .luxury-showcase__subheading {
+    font-size: 1.1rem;
+    font-weight: 300;
+    line-height: 1.6;
+    margin: 0;
+    color: var(--color-foreground);
+    opacity: 0.8;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .luxury-showcase__grid {
+    display: grid;
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+  
+  .luxury-showcase__grid--standard {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+  
+  .luxury-showcase__grid--bento {
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: 400px;
+  }
+  
+  .luxury-showcase__grid--bento .luxury-showcase__item:nth-child(1) {
+    grid-column: 1 / 8;
+    grid-row: 1 / 3;
+  }
+  
+  .luxury-showcase__grid--bento .luxury-showcase__item:nth-child(2) {
+    grid-column: 8 / 13;
+    grid-row: 1 / 2;
+  }
+  
+  .luxury-showcase__grid--bento .luxury-showcase__item:nth-child(3) {
+    grid-column: 8 / 13;
+    grid-row: 2 / 3;
+  }
+  
+  .luxury-showcase__grid--bento .luxury-showcase__item:nth-child(4) {
+    grid-column: 1 / 5;
+    grid-row: 3 / 4;
+  }
+  
+  .luxury-showcase__grid--bento .luxury-showcase__item:nth-child(5) {
+    grid-column: 5 / 9;
+    grid-row: 3 / 4;
+  }
+  
+  .luxury-showcase__grid--bento .luxury-showcase__item:nth-child(6) {
+    grid-column: 9 / 13;
+    grid-row: 3 / 4;
+  }
+  
+  .luxury-showcase__item {
+    position: relative;
+  }
+  
+  .luxury-showcase__product-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-background);
+    border-radius: 0;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .luxury-showcase__product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  }
+  
+  .luxury-showcase__image-wrapper {
+    position: relative;
+    overflow: hidden;
+    flex: 1;
+    min-height: 300px;
+  }
+  
+  .luxury-showcase__link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  
+  .luxury-showcase__image,
+  .luxury-showcase__placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .luxury-showcase__image--hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  .luxury-showcase__product-card:hover .luxury-showcase__image--primary {
+    transform: scale(1.05);
+  }
+  
+  .luxury-showcase__product-card:hover .luxury-showcase__image--hover {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  
+  .luxury-showcase__quick-add {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100%);
+    z-index: 2;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .luxury-showcase__product-card:hover .luxury-showcase__quick-add {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  
+  .luxury-showcase__quick-add-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+  
+  .luxury-showcase__quick-add-btn:hover {
+    background: rgba(0, 0, 0, 1);
+  }
+  
+  .luxury-showcase__content {
+    padding: 1.5rem;
+    flex-shrink: 0;
+  }
+  
+  .luxury-showcase__product-title {
+    font-size: 1.1rem;
+    font-weight: 400;
+    line-height: 1.4;
+    margin: 0 0 0.5rem 0;
+    color: var(--color-foreground);
+  }
+  
+  .luxury-showcase__product-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .luxury-showcase__product-title a:hover {
+    color: var(--color-foreground);
+    opacity: 0.7;
+  }
+  
+  .luxury-showcase__product-description {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--color-foreground);
+    opacity: 0.7;
+    margin-bottom: 1rem;
+  }
+  
+  .luxury-showcase__price-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  .luxury-showcase__price {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-foreground);
+  }
+  
+  .luxury-showcase__price--sale {
+    color: #d4462a;
+  }
+  
+  .luxury-showcase__price--compare {
+    text-decoration: line-through;
+    opacity: 0.6;
+    font-size: 0.9rem;
+  }
+  
+  .luxury-showcase__variants {
+    margin-top: 0.75rem;
+  }
+  
+  .luxury-showcase__color-swatches {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .luxury-showcase__color-swatch {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .luxury-showcase__more-colors {
+    font-size: 0.8rem;
+    color: var(--color-foreground);
+    opacity: 0.6;
+  }
+  
+  .luxury-showcase__footer {
+    text-align: center;
+  }
+  
+  .luxury-showcase__view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    background: transparent;
+    border: 1px solid var(--color-foreground);
+    color: var(--color-foreground);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+  }
+  
+  .luxury-showcase__view-all:hover {
+    background: var(--color-foreground);
+    color: var(--color-background);
+  }
+  
+  .luxury-showcase__arrow {
+    transition: transform 0.3s ease;
+  }
+  
+  .luxury-showcase__view-all:hover .luxury-showcase__arrow {
+    transform: translateX(3px);
+  }
+  
+  @media (max-width: 768px) {
+    .luxury-showcase {
+      padding: 3rem 0;
+    }
+    
+    .luxury-showcase__container {
+      padding: 0 1rem;
+    }
+    
+    .luxury-showcase__header {
+      margin-bottom: 2rem;
+    }
+    
+    .luxury-showcase__grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .luxury-showcase__grid--bento {
+      grid-template-columns: 1fr;
+      grid-auto-rows: 350px;
+    }
+    
+    .luxury-showcase__grid--bento .luxury-showcase__item {
+      grid-column: 1;
+      grid-row: auto;
+    }
+    
+    .luxury-showcase__image-wrapper {
+      min-height: 250px;
+    }
+    
+    .luxury-showcase__content {
+      padding: 1rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxury Product Showcase",
+  "tag": "section",
+  "class": "luxury-showcase-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "featured collection"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Discover our carefully curated selection of premium pieces"
+    },
+    {
+      "type": "header",
+      "content": "Collection"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show product descriptions",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout_style",
+      "label": "Layout Style",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard Grid"
+        },
+        {
+          "value": "bento",
+          "label": "Bento Grid (Editorial)"
+        }
+      ],
+      "default": "standard"
+    },
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "View All Products"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxury Product Showcase",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

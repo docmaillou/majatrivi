@@ -1,2 +1,1 @@
-https://creatureatelier.ca
-you're buiding a shopify website
+I'm a website designer specializing in Shopify development and e-commerce solutions.

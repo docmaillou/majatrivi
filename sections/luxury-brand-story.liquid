@@ -1,0 +1,427 @@
+{% liquid
+  assign image = section.settings.image
+  assign image_position = section.settings.image_position
+  assign heading = section.settings.heading
+  assign text_1 = section.settings.text_1
+  assign text_2 = section.settings.text_2
+  assign button_text = section.settings.button_text
+  assign button_link = section.settings.button_link
+%}
+
+<section 
+  id="LuxuryBrandStory-{{ section.id }}" 
+  class="luxury-brand-story color-{{ section.settings.color_scheme }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="luxury-brand-story__container">
+    <div class="luxury-brand-story__grid luxury-brand-story__grid--{{ image_position }}">
+      <div class="luxury-brand-story__content" data-aos="fade-up">
+        <div class="luxury-brand-story__content-inner">
+          {% if section.settings.eyebrow != blank %}
+            <div class="luxury-brand-story__eyebrow">{{ section.settings.eyebrow }}</div>
+          {% endif %}
+          
+          {% if heading != blank %}
+            <h2 class="luxury-brand-story__heading">{{ heading }}</h2>
+          {% endif %}
+          
+          {% if text_1 != blank %}
+            <div class="luxury-brand-story__text luxury-brand-story__text--primary">
+              {{ text_1 }}
+            </div>
+          {% endif %}
+          
+          {% if text_2 != blank %}
+            <div class="luxury-brand-story__text luxury-brand-story__text--secondary">
+              {{ text_2 }}
+            </div>
+          {% endif %}
+          
+          {% if button_text != blank and button_link != blank %}
+            <div class="luxury-brand-story__button-wrapper">
+              <a href="{{ button_link }}" class="luxury-brand-story__button">
+                {{ button_text }}
+                <svg class="luxury-brand-story__button-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 1L15 8L8 15M15 8H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      
+      <div class="luxury-brand-story__media" data-aos="fade-up" data-aos-delay="200">
+        {% if image != blank %}
+          <div class="luxury-brand-story__image-wrapper">
+            {{ image | image_url: width: 1200 | image_tag: 
+              alt: image.alt | default: 'Brand story image',
+              class: 'luxury-brand-story__image',
+              loading: 'lazy'
+            }}
+            <div class="luxury-brand-story__image-overlay"></div>
+          </div>
+        {% else %}
+          <div class="luxury-brand-story__placeholder">
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'luxury-brand-story__placeholder-svg' }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .luxury-brand-story {
+    padding: 6rem 0;
+    background: var(--color-background);
+    overflow: hidden;
+  }
+  
+  .luxury-brand-story__container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  
+  .luxury-brand-story__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    min-height: 70vh;
+  }
+  
+  .luxury-brand-story__grid--right .luxury-brand-story__content {
+    order: 2;
+  }
+  
+  .luxury-brand-story__grid--right .luxury-brand-story__media {
+    order: 1;
+  }
+  
+  .luxury-brand-story__content {
+    display: flex;
+    align-items: center;
+    min-height: 500px;
+  }
+  
+  .luxury-brand-story__content-inner {
+    max-width: 500px;
+  }
+  
+  .luxury-brand-story__eyebrow {
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+    opacity: 0.7;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  
+  .luxury-brand-story__eyebrow::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -0.5rem;
+    width: 40px;
+    height: 1px;
+    background: var(--color-foreground);
+    opacity: 0.3;
+  }
+  
+  .luxury-brand-story__heading {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 0 0 2rem 0;
+    color: var(--color-foreground);
+    font-family: var(--font-primary--family);
+  }
+  
+  .luxury-brand-story__text {
+    line-height: 1.7;
+    color: var(--color-foreground);
+    margin-bottom: 1.5rem;
+  }
+  
+  .luxury-brand-story__text--primary {
+    font-size: 1.2rem;
+    font-weight: 300;
+  }
+  
+  .luxury-brand-story__text--secondary {
+    font-size: 1rem;
+    opacity: 0.8;
+  }
+  
+  .luxury-brand-story__text p {
+    margin: 0 0 1rem 0;
+  }
+  
+  .luxury-brand-story__text p:last-child {
+    margin-bottom: 0;
+  }
+  
+  .luxury-brand-story__button-wrapper {
+    margin-top: 2.5rem;
+  }
+  
+  .luxury-brand-story__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--color-foreground);
+    color: var(--color-foreground);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  
+  .luxury-brand-story__button::before {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--color-foreground);
+    transition: width 0.3s ease;
+  }
+  
+  .luxury-brand-story__button:hover::before {
+    width: 100%;
+  }
+  
+  .luxury-brand-story__button:hover {
+    opacity: 0.7;
+  }
+  
+  .luxury-brand-story__button-arrow {
+    transition: transform 0.3s ease;
+  }
+  
+  .luxury-brand-story__button:hover .luxury-brand-story__button-arrow {
+    transform: translateX(5px);
+  }
+  
+  .luxury-brand-story__media {
+    position: relative;
+    min-height: 500px;
+  }
+  
+  .luxury-brand-story__image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .luxury-brand-story__image,
+  .luxury-brand-story__placeholder-svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+  }
+  
+  .luxury-brand-story__image-wrapper:hover .luxury-brand-story__image {
+    transform: scale(1.05);
+  }
+  
+  .luxury-brand-story__image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg, 
+      rgba(0, 0, 0, 0.1) 0%, 
+      rgba(0, 0, 0, 0.05) 50%, 
+      rgba(0, 0, 0, 0.15) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .luxury-brand-story__image-wrapper:hover .luxury-brand-story__image-overlay {
+    opacity: 1;
+  }
+  
+  .luxury-brand-story__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+    min-height: 500px;
+  }
+  
+  .luxury-brand-story__placeholder-svg {
+    width: 200px;
+    height: 200px;
+    opacity: 0.3;
+  }
+  
+  @media (max-width: 1024px) {
+    .luxury-brand-story {
+      padding: 4rem 0;
+    }
+    
+    .luxury-brand-story__grid {
+      gap: 3rem;
+    }
+    
+    .luxury-brand-story__content {
+      min-height: 400px;
+    }
+    
+    .luxury-brand-story__media {
+      min-height: 400px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .luxury-brand-story {
+      padding: 3rem 0;
+    }
+    
+    .luxury-brand-story__container {
+      padding: 0 1rem;
+    }
+    
+    .luxury-brand-story__grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      min-height: auto;
+    }
+    
+    .luxury-brand-story__grid--right .luxury-brand-story__content,
+    .luxury-brand-story__grid--right .luxury-brand-story__media {
+      order: initial;
+    }
+    
+    .luxury-brand-story__content {
+      min-height: auto;
+      text-align: center;
+    }
+    
+    .luxury-brand-story__content-inner {
+      max-width: 100%;
+    }
+    
+    .luxury-brand-story__eyebrow::after {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .luxury-brand-story__media {
+      min-height: 300px;
+    }
+    
+    .luxury-brand-story__placeholder {
+      min-height: 300px;
+    }
+    
+    .luxury-brand-story__button-wrapper {
+      margin-top: 2rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Luxury Brand Story",
+  "tag": "section",
+  "class": "luxury-brand-story-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "Our Story"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Crafted with Passion"
+    },
+    {
+      "type": "richtext",
+      "id": "text_1",
+      "label": "Primary Text",
+      "default": "<p>At MAJATRIVI, we believe that luxury is not just about premium materials—it's about the story behind every stitch, the passion in every design, and the commitment to excellence that drives us forward.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "text_2",
+      "label": "Secondary Text",
+      "default": "<p>Our journey began with a simple vision: to create clothing that transcends trends and becomes a lasting part of your wardrobe. Each piece is carefully crafted by skilled artisans who share our dedication to quality and attention to detail.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Learn More About Us"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image Position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxury Brand Story",
+      "category": "Text"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,81 @@
+/*
+ * ------------------------------------------------------------
+ * MAJATRIVI Luxury Homepage Template
+ * Custom luxury design for high-end fashion brand
+ * ------------------------------------------------------------
+ */{
+  "sections": {
+    "luxury_hero_video": {
+      "type": "luxury-hero-video",
+      "settings": {
+        "video_url": "https://cdn.shopify.com/videos/c/o/v/fbb140fd46e3429eba459e1549dbbe38.mp4",
+        "heading": "MAJATRIVI",
+        "subheading": "Luxury fashion redefined. Discover our exclusive collection of premium clothing crafted for the modern connoisseur.",
+        "button_text": "Explore Collection",
+        "button_link": "/collections/all",
+        "show_overlay": true,
+        "overlay_opacity": 40,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "luxury_product_showcase_featured": {
+      "type": "luxury-product-showcase",
+      "settings": {
+        "heading": "featured collection",
+        "subheading": "Discover our carefully curated selection of premium pieces that define contemporary luxury",
+        "collection": "all",
+        "products_to_show": 6,
+        "show_description": false,
+        "layout_style": "bento",
+        "button_text": "View All Products",
+        "button_link": "/collections/all",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "luxury_brand_story": {
+      "type": "luxury-brand-story",
+      "settings": {
+        "eyebrow": "Our Story",
+        "heading": "Crafted with Passion",
+        "text_1": "<p>At MAJATRIVI, we believe that luxury is not just about premium materials—it's about the story behind every stitch, the passion in every design, and the commitment to excellence that drives us forward.</p>",
+        "text_2": "<p>Our journey began with a simple vision: to create clothing that transcends trends and becomes a lasting part of your wardrobe. Each piece is carefully crafted by skilled artisans who share our dedication to quality and attention to detail.</p>",
+        "button_text": "Learn More About Us",
+        "image_position": "right",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "luxury_product_showcase_bestsellers": {
+      "type": "luxury-product-showcase",
+      "settings": {
+        "heading": "bestsellers",
+        "subheading": "Our most coveted pieces, loved by customers worldwide",
+        "collection": "all",
+        "products_to_show": 4,
+        "show_description": true,
+        "layout_style": "standard",
+        "button_text": "Shop Bestsellers",
+        "button_link": "/collections/bestsellers",
+        "color_scheme": "scheme-2"
+      }
+    },
+    "luxury_brand_story_2": {
+      "type": "luxury-brand-story",
+      "settings": {
+        "eyebrow": "New Arrivals",
+        "heading": "Fall Collection 2024",
+        "text_1": "<p>Introducing our latest collection, where timeless elegance meets contemporary design. Each piece reflects our commitment to sustainable luxury and exceptional craftsmanship.</p>",
+        "text_2": "<p>From sophisticated eveningwear to elevated everyday essentials, our new arrivals offer versatile pieces that seamlessly transition from day to night, season to season.</p>",
+        "button_text": "Shop New Arrivals",
+        "image_position": "left",
+        "color_scheme": "scheme-3"
+      }
+    }
+  },
+  "order": [
+    "luxury_hero_video",
+    "luxury_product_showcase_featured",
+    "luxury_brand_story",
+    "luxury_product_showcase_bestsellers",
+    "luxury_brand_story_2"
+  ]
+}

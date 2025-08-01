@@ -1,0 +1,376 @@
+{% liquid
+  assign heading = section.settings.heading
+  assign subheading = section.settings.subheading
+  assign text_content = section.settings.text_content
+  assign button_text = section.settings.button_text
+  assign button_link = section.settings.button_link
+  assign background_image = section.settings.background_image
+  assign overlay_opacity = section.settings.overlay_opacity
+  assign text_position = section.settings.text_position
+  assign text_color = section.settings.text_color
+%}
+
+<section 
+  id="MajatriviBrandStory-{{ section.id }}" 
+  class="majatrivi-brand-story-fullscreen"
+  data-section-id="{{ section.id }}"
+>
+  <div class="majatrivi-brand-story-fullscreen__media">
+    {% if background_image != blank %}
+      <div class="majatrivi-brand-story-fullscreen__image-wrapper">
+        {{ background_image | image_url: width: 2000 | image_tag: 
+          class: 'majatrivi-brand-story-fullscreen__image',
+          sizes: '100vw',
+          widths: '800, 1200, 1600, 2000',
+          loading: 'lazy'
+        }}
+      </div>
+    {% else %}
+      <div class="majatrivi-brand-story-fullscreen__placeholder">
+        {{ 'hero-apparel-2' | placeholder_svg_tag: 'majatrivi-brand-story-fullscreen__placeholder-svg' }}
+      </div>
+    {% endif %}
+    
+    {% if overlay_opacity > 0 %}
+      <div class="majatrivi-brand-story-fullscreen__overlay" style="opacity: {{ overlay_opacity | divided_by: 100.0 }}"></div>
+    {% endif %}
+  </div>
+  
+  <div class="majatrivi-brand-story-fullscreen__content" data-position="{{ text_position }}" data-color="{{ text_color }}">
+    <div class="majatrivi-brand-story-fullscreen__content-inner luxury-fade-in">
+      {% if subheading != blank %}
+        <p class="majatrivi-brand-story-fullscreen__subheading luxury-eyebrow">{{ subheading }}</p>
+      {% endif %}
+      
+      {% if heading != blank %}
+        <h2 class="majatrivi-brand-story-fullscreen__heading luxury-heading-xl">{{ heading }}</h2>
+      {% endif %}
+      
+      {% if text_content != blank %}
+        <div class="majatrivi-brand-story-fullscreen__text luxury-text-lg">
+          {{ text_content }}
+        </div>
+      {% endif %}
+      
+      {% if button_text != blank and button_link != blank %}
+        <div class="majatrivi-brand-story-fullscreen__button-wrapper">
+          <a href="{{ button_link }}" class="majatrivi-brand-story-fullscreen__button luxury-btn luxury-btn--ghost">
+            {{ button_text }}
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M10 3L17 10L10 17M17 10H3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .majatrivi-brand-story-fullscreen {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #0a0a0a;
+  }
+  
+  .majatrivi-brand-story-fullscreen__media {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+  
+  .majatrivi-brand-story-fullscreen__image-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+  
+  .majatrivi-brand-story-fullscreen__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 20s ease-out;
+  }
+  
+  .majatrivi-brand-story-fullscreen__image:hover {
+    transform: scale(1.05);
+  }
+  
+  .majatrivi-brand-story-fullscreen__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+  }
+  
+  .majatrivi-brand-story-fullscreen__placeholder-svg {
+    width: 300px;
+    height: 300px;
+    opacity: 0.2;
+  }
+  
+  .majatrivi-brand-story-fullscreen__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.3) 0%,
+      rgba(0, 0, 0, 0.1) 40%,
+      rgba(0, 0, 0, 0.5) 100%
+    );
+    z-index: 2;
+  }
+  
+  .majatrivi-brand-story-fullscreen__content {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  .majatrivi-brand-story-fullscreen__content[data-position="left"] {
+    justify-content: flex-start;
+  }
+  
+  .majatrivi-brand-story-fullscreen__content[data-position="center"] {
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .majatrivi-brand-story-fullscreen__content[data-position="right"] {
+    justify-content: flex-end;
+    text-align: right;
+  }
+  
+  .majatrivi-brand-story-fullscreen__content[data-color="white"] {
+    color: #ffffff;
+  }
+  
+  .majatrivi-brand-story-fullscreen__content[data-color="black"] {
+    color: #0a0a0a;
+  }
+  
+  .majatrivi-brand-story-fullscreen__content-inner {
+    max-width: 600px;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  
+  .majatrivi-brand-story-fullscreen__content-inner.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .majatrivi-brand-story-fullscreen__subheading {
+    margin: 0 0 1.5rem 0;
+    opacity: 0.8;
+  }
+  
+  .majatrivi-brand-story-fullscreen__heading {
+    margin: 0 0 2rem 0;
+    line-height: 1.1;
+  }
+  
+  .majatrivi-brand-story-fullscreen__text {
+    margin: 0 0 3rem 0;
+    opacity: 0.9;
+  }
+  
+  .majatrivi-brand-story-fullscreen__text p {
+    margin: 0 0 1.5rem 0;
+  }
+  
+  .majatrivi-brand-story-fullscreen__text p:last-child {
+    margin-bottom: 0;
+  }
+  
+  .majatrivi-brand-story-fullscreen__button-wrapper {
+    margin-top: 2rem;
+  }
+  
+  .majatrivi-brand-story-fullscreen__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.3s ease;
+  }
+  
+  .majatrivi-brand-story-fullscreen__button svg {
+    transition: transform 0.3s ease;
+  }
+  
+  .majatrivi-brand-story-fullscreen__button:hover svg {
+    transform: translateX(5px);
+  }
+  
+  /* Parallax effect on scroll */
+  @media (prefers-reduced-motion: no-preference) {
+    .majatrivi-brand-story-fullscreen__image {
+      transform: scale(1.1);
+    }
+    
+    .majatrivi-brand-story-fullscreen[data-parallax] .majatrivi-brand-story-fullscreen__image {
+      transform: scale(1.1) translateY(var(--parallax-offset, 0px));
+      transition: transform 20s ease-out;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .majatrivi-brand-story-fullscreen {
+      min-height: 80vh;
+    }
+    
+    .majatrivi-brand-story-fullscreen__content {
+      padding: 0 1rem;
+      min-height: 80vh;
+    }
+    
+    .majatrivi-brand-story-fullscreen__content[data-position="right"] {
+      text-align: left;
+    }
+    
+    .majatrivi-brand-story-fullscreen__content-inner {
+      max-width: 100%;
+    }
+    
+    .majatrivi-brand-story-fullscreen__heading {
+      margin-bottom: 1.5rem;
+    }
+    
+    .majatrivi-brand-story-fullscreen__text {
+      margin-bottom: 2rem;
+    }
+  }
+  
+  /* Smooth entrance animation */
+  .majatrivi-brand-story-fullscreen .luxury-fade-in {
+    animation-delay: 0.5s;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "MAJATRIVI Brand Story Fullscreen",
+  "tag": "section",
+  "class": "majatrivi-brand-story-fullscreen-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Our Story"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Crafted with Purpose"
+    },
+    {
+      "type": "richtext",
+      "id": "text_content",
+      "label": "Text Content",
+      "default": "<p>Every piece in our collection tells a story of meticulous craftsmanship, sustainable practices, and timeless design. We believe fashion should transcend seasons and trends.</p><p>Our commitment to excellence begins with the finest materials and extends through every detail of construction, creating garments that become treasured parts of your wardrobe.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link",
+      "default": "/pages/about"
+    },
+    {
+      "type": "header",
+      "content": "Visual Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image",
+      "info": "Recommended: 2000x1200px for best quality"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay Opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 40,
+      "info": "Darkens the image for better text readability"
+    },
+    {
+      "type": "select",
+      "id": "text_position",
+      "label": "Text Position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "text_color",
+      "label": "Text Color",
+      "options": [
+        {
+          "value": "white",
+          "label": "White"
+        },
+        {
+          "value": "black",
+          "label": "Black"
+        }
+      ],
+      "default": "white"
+    }
+  ],
+  "presets": [
+    {
+      "name": "MAJATRIVI Brand Story Fullscreen",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}
