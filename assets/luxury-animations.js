@@ -10,6 +10,12 @@ class LuxuryAnimations {
     this.initParallaxEffects();
     this.initVideoControls();
     this.initLuxuryInteractions();
+    this.initMajatriviHeader();
+    this.initAdvancedScrollEffects();
+    this.initSectionTransitions();
+    this.initMajatriviAnimations();
+    this.initTextRevealAnimations();
+    this.initHeroEnhancements();
   }
 
   /**
@@ -344,6 +350,408 @@ class LuxuryAnimations {
   }
 
   /**
+   * Initialize MAJATRIVI header interactions
+   */
+  initMajatriviHeader() {
+    const header = document.querySelector('.majatrivi-header');
+    if (!header) return;
+
+    // Mobile menu toggle
+    const mobileToggle = header.querySelector('.majatrivi-header__mobile-toggle');
+    const mobileNav = header.querySelector('.majatrivi-header__mobile-nav');
+    
+    if (mobileToggle && mobileNav) {
+      mobileToggle.addEventListener('click', () => {
+        const isOpen = mobileToggle.getAttribute('aria-expanded') === 'true';
+        mobileToggle.setAttribute('aria-expanded', !isOpen);
+        mobileNav.setAttribute('aria-hidden', isOpen);
+        document.body.style.overflow = isOpen ? '' : 'hidden';
+      });
+    }
+
+    // Search modal toggle
+    const searchToggle = header.querySelector('.majatrivi-header__search-toggle');
+    const searchModal = header.querySelector('.majatrivi-header__search-modal');
+    const searchClose = header.querySelector('.majatrivi-header__search-close');
+    
+    if (searchToggle && searchModal) {
+      searchToggle.addEventListener('click', () => {
+        searchModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        // Focus on search input
+        const searchInput = searchModal.querySelector('.majatrivi-header__search-input');
+        if (searchInput) {
+          setTimeout(() => searchInput.focus(), 100);
+        }
+      });
+    }
+
+    if (searchClose && searchModal) {
+      searchClose.addEventListener('click', () => {
+        searchModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      });
+    }
+
+    // Close modals on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (mobileNav && mobileNav.getAttribute('aria-hidden') === 'false') {
+          mobileToggle.setAttribute('aria-expanded', 'false');
+          mobileNav.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+        }
+        if (searchModal && searchModal.getAttribute('aria-hidden') === 'false') {
+          searchModal.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+        }
+      }
+    });
+
+    // Header scroll behavior
+    this.initHeaderScrollBehavior(header);
+  }
+
+  /**
+   * Initialize header scroll behavior
+   */
+  initHeaderScrollBehavior(header) {
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    const updateHeader = () => {
+      const scrollY = window.scrollY;
+      
+      // Add scrolled class when scrolled
+      if (scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+
+      lastScrollY = scrollY;
+      ticking = false;
+    };
+
+    const requestTick = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateHeader);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', requestTick, { passive: true });
+  }
+
+  /**
+   * Initialize advanced scroll effects
+   */
+  initAdvancedScrollEffects() {
+    const parallaxElements = document.querySelectorAll('.majatrivi-parallax-slow, .majatrivi-parallax-medium, .majatrivi-parallax-fast');
+    
+    if (parallaxElements.length === 0) return;
+
+    let ticking = false;
+
+    const updateParallax = () => {
+      const scrollY = window.pageYOffset;
+      
+      parallaxElements.forEach(element => {
+        const rect = element.getBoundingClientRect();
+        const elementTop = rect.top + scrollY;
+        const elementHeight = rect.height;
+        const windowHeight = window.innerHeight;
+        
+        // Only apply parallax when element is in viewport
+        if (rect.bottom >= 0 && rect.top <= windowHeight) {
+          const scrollOffset = scrollY - elementTop + windowHeight;
+          element.style.setProperty('--scroll-offset', `${scrollOffset}px`);
+        }
+      });
+      
+      ticking = false;
+    };
+
+    const requestTick = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateParallax);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', requestTick, { passive: true });
+  }
+
+  /**
+   * Initialize section transitions
+   */
+  initSectionTransitions() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          
+          // Handle staggered children
+          if (entry.target.classList.contains('majatrivi-stagger-children')) {
+            const children = entry.target.children;
+            Array.from(children).forEach((child, index) => {
+              setTimeout(() => {
+                child.style.opacity = '1';
+                child.style.transform = 'translateY(0)';
+              }, index * 100);
+            });
+          }
+
+          // Handle reveal text
+          const revealTexts = entry.target.querySelectorAll('.majatrivi-reveal-text');
+          revealTexts.forEach((text, index) => {
+            setTimeout(() => {
+              text.classList.add('is-visible');
+            }, index * 150);
+          });
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    // Observe elements with transition classes
+    const transitionElements = document.querySelectorAll(`
+      .majatrivi-section-transition,
+      .majatrivi-stagger-children,
+      .majatrivi-reveal
+    `);
+
+    transitionElements.forEach(el => {
+      observer.observe(el);
+    });
+  }
+
+  /**
+   * Enhanced smooth scrolling with easing
+   */
+  smoothScrollTo(target, duration = 1000) {
+    const targetPosition = target.offsetTop - (document.querySelector('.majatrivi-header')?.offsetHeight || 0);
+    const startPosition = window.pageYOffset;
+    const distance = targetPosition - startPosition;
+    let startTime = null;
+
+    const easeInOutQuart = (t) => {
+      return t < 0.5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t;
+    };
+
+    const animation = (currentTime) => {
+      if (startTime === null) startTime = currentTime;
+      const timeElapsed = currentTime - startTime;
+      const progress = Math.min(timeElapsed / duration, 1);
+      const eased = easeInOutQuart(progress);
+      
+      window.scrollTo(0, startPosition + distance * eased);
+      
+      if (timeElapsed < duration) {
+        requestAnimationFrame(animation);
+      }
+    };
+
+    requestAnimationFrame(animation);
+  }
+
+  /**
+   * Initialize MAJATRIVI specific animations
+   */
+  initMajatriviAnimations() {
+    // Add flowing background to hero sections
+    this.addFlowingBackgrounds();
+    
+    // Initialize floating elements
+    this.initFloatingElements();
+    
+    // Add section flow animations
+    this.addSectionFlowAnimations();
+  }
+
+  /**
+   * Add flowing backgrounds to sections (skip if already exists in section)
+   */
+  addFlowingBackgrounds() {
+    const heroSections = document.querySelectorAll('.luxury-hero:not(.majatrivi-hero)');
+    
+    heroSections.forEach(section => {
+      if (!section.querySelector('.majatrivi-flowing-bg') && !section.querySelector('.majatrivi-hero__flowing-bg')) {
+        const flowingBg = document.createElement('div');
+        flowingBg.className = 'majatrivi-flowing-bg';
+        section.appendChild(flowingBg);
+        section.classList.add('majatrivi-hero-enhanced');
+      }
+    });
+  }
+
+  /**
+   * Initialize floating elements
+   */
+  initFloatingElements() {
+    const floatingElements = document.querySelectorAll('[data-float]');
+    
+    floatingElements.forEach(element => {
+      const speed = element.dataset.float || 'normal';
+      element.classList.add('majatrivi-floating-element');
+      
+      if (speed === 'slow') {
+        element.classList.add('majatrivi-floating-element--slow');
+      } else if (speed === 'fast') {
+        element.classList.add('majatrivi-floating-element--fast');
+      }
+    });
+  }
+
+  /**
+   * Add section flow animations
+   */
+  addSectionFlowAnimations() {
+    const sections = document.querySelectorAll('section, .section');
+    
+    sections.forEach((section, index) => {
+      if (index > 0 && !section.classList.contains('no-flow')) {
+        section.classList.add('majatrivi-section-flow');
+      }
+    });
+  }
+
+  /**
+   * Initialize text reveal animations
+   */
+  initTextRevealAnimations() {
+    const textElements = document.querySelectorAll('[data-text-reveal]');
+    
+    textElements.forEach(element => {
+      this.wrapTextLines(element);
+      element.classList.add('majatrivi-text-reveal');
+    });
+
+    // Observe text reveal elements
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        }
+      });
+    }, {
+      threshold: 0.3,
+      rootMargin: '0px 0px -100px 0px'
+    });
+
+    textElements.forEach(el => observer.observe(el));
+  }
+
+  /**
+   * Wrap text lines for reveal animation
+   */
+  wrapTextLines(element) {
+    const text = element.textContent;
+    const words = text.split(' ');
+    const wordsPerLine = Math.ceil(words.length / 3); // Approximate 3 lines
+    
+    element.innerHTML = '';
+    
+    for (let i = 0; i < words.length; i += wordsPerLine) {
+      const line = words.slice(i, i + wordsPerLine).join(' ');
+      const lineSpan = document.createElement('span');
+      lineSpan.className = 'reveal-line';
+      lineSpan.textContent = line;
+      element.appendChild(lineSpan);
+      
+      if (i + wordsPerLine < words.length) {
+        element.appendChild(document.createElement('br'));
+      }
+    }
+  }
+
+  /**
+   * Initialize hero enhancements
+   */
+  initHeroEnhancements() {
+    // Enhanced button interactions
+    this.enhanceHeroButtons();
+    
+    // Add scroll indicators
+    this.addScrollIndicators();
+    
+    // Initialize mouse parallax for hero elements
+    this.initMouseParallax();
+  }
+
+  /**
+   * Enhance hero buttons with MAJATRIVI styling (skip if already styled)
+   */
+  enhanceHeroButtons() {
+    const heroButtons = document.querySelectorAll('.luxury-hero__button:not(.majatrivi-hero__cta), [data-hero-button]:not(.majatrivi-hero__cta)');
+    
+    heroButtons.forEach(button => {
+      if (!button.classList.contains('majatrivi-hero-btn')) {
+        button.classList.add('majatrivi-hero-btn');
+        
+        // Add arrow if it doesn't exist
+        if (!button.querySelector('.btn-arrow') && !button.querySelector('svg')) {
+          const arrow = document.createElement('span');
+          arrow.className = 'btn-arrow';
+          arrow.innerHTML = '→';
+          button.appendChild(arrow);
+        }
+      }
+    });
+  }
+
+  /**
+   * Add scroll indicators to hero sections (disabled for clean design)
+   */
+  addScrollIndicators() {
+    // Disabled for clean, minimal design - no scroll indicators needed
+    return;
+  }
+
+  /**
+   * Initialize mouse parallax for hero elements
+   */
+  initMouseParallax() {
+    const parallaxElements = document.querySelectorAll('[data-mouse-parallax]');
+    
+    if (parallaxElements.length === 0) return;
+    
+    let mouseX = 0;
+    let mouseY = 0;
+    let ticking = false;
+
+    const updateMouseParallax = () => {
+      parallaxElements.forEach(element => {
+        const speed = parseFloat(element.dataset.mouseParallax) || 0.1;
+        const rect = element.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        const deltaX = (mouseX - centerX) * speed;
+        const deltaY = (mouseY - centerY) * speed;
+        
+        element.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+      });
+      
+      ticking = false;
+    };
+
+    const handleMouseMove = (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      
+      if (!ticking) {
+        requestAnimationFrame(updateMouseParallax);
+        ticking = true;
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMove, { passive: true });
+  }
+
+  /**
    * Handle reduced motion preferences
    */
   handleReducedMotion() {
@@ -353,18 +761,70 @@ class LuxuryAnimations {
       document.body.classList.add('reduce-motion');
       
       // Disable complex animations
-      const animatedElements = document.querySelectorAll('[data-aos]');
+      const animatedElements = document.querySelectorAll('[data-aos], .majatrivi-section-transition, .majatrivi-reveal-text');
       animatedElements.forEach(el => {
         el.classList.add('is-visible');
+        el.style.opacity = '1';
+        el.style.transform = 'none';
       });
+    }
+  }
+}
+
+// Performance optimization for animations
+class PerformanceOptimizer {
+  constructor() {
+    this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.isLowEndDevice = this.detectLowEndDevice();
+    this.initPerformanceOptimizations();
+  }
+
+  detectLowEndDevice() {
+    // Simple heuristic for low-end devices
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const deviceMemory = navigator.deviceMemory;
+    const hardwareConcurrency = navigator.hardwareConcurrency;
+    
+    if (deviceMemory && deviceMemory < 4) return true;
+    if (hardwareConcurrency && hardwareConcurrency < 4) return true;
+    if (connection && connection.effectiveType && ['slow-2g', '2g', '3g'].includes(connection.effectiveType)) return true;
+    
+    return false;
+  }
+
+  initPerformanceOptimizations() {
+    if (this.prefersReducedMotion || this.isLowEndDevice) {
+      document.body.classList.add('reduce-animations');
+      
+      // Simplify animations for better performance
+      const style = document.createElement('style');
+      style.textContent = `
+        .reduce-animations .majatrivi-flowing-bg::before,
+        .reduce-animations .majatrivi-flowing-bg::after,
+        .reduce-animations .majatrivi-hero-enhanced::before,
+        .reduce-animations .majatrivi-section-flow::before {
+          animation-duration: 0.1s !important;
+          animation-iteration-count: 1 !important;
+        }
+        
+        .reduce-animations .majatrivi-floating-element {
+          animation: none !important;
+        }
+      `;
+      document.head.appendChild(style);
     }
   }
 }
 
 // Initialize animations when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
+  // Initialize performance optimizer first
+  new PerformanceOptimizer();
+  
+  // Then initialize animations
   new LuxuryAnimations();
 });
 
 // Export for use in other scripts
 window.LuxuryAnimations = LuxuryAnimations;
+window.PerformanceOptimizer = PerformanceOptimizer;

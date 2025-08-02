@@ -1,0 +1,529 @@
+{% liquid
+  assign heading = section.settings.heading
+  assign subheading = section.settings.subheading
+  assign text_content = section.settings.text_content
+  assign button_text = section.settings.button_text
+  assign button_link = section.settings.button_link
+  assign background_image = section.settings.background_image
+  assign visual_style = section.settings.visual_style
+  assign animation_style = section.settings.animation_style
+%}
+
+<section 
+  id="MajatriviAtmospheric-{{ section.id }}" 
+  class="majatrivi-atmospheric-visual majatrivi-atmospheric-visual--{{ visual_style }}"
+  data-section-id="{{ section.id }}"
+  data-animation="{{ animation_style }}"
+>
+  <div class="majatrivi-atmospheric-visual__media">
+    {% if background_image != blank %}
+      <div class="majatrivi-atmospheric-visual__image-wrapper">
+        {{ background_image | image_url: width: 2000 | image_tag: 
+          class: 'majatrivi-atmospheric-visual__image',
+          sizes: '100vw',
+          widths: '800, 1200, 1600, 2000',
+          loading: 'lazy'
+        }}
+      </div>
+    {% else %}
+      <div class="majatrivi-atmospheric-visual__gradient"></div>
+    {% endif %}
+    
+    <!-- Atmospheric Effects -->
+    <div class="majatrivi-atmospheric-visual__effects">
+      {% for i in (1..6) %}
+        <div class="majatrivi-atmospheric-visual__particle majatrivi-atmospheric-visual__particle--{{ i }}"></div>
+      {% endfor %}
+    </div>
+    
+    <!-- Floating Elements -->
+    <div class="majatrivi-atmospheric-visual__floating-elements">
+      <div class="majatrivi-atmospheric-visual__orb majatrivi-atmospheric-visual__orb--1"></div>
+      <div class="majatrivi-atmospheric-visual__orb majatrivi-atmospheric-visual__orb--2"></div>
+      <div class="majatrivi-atmospheric-visual__orb majatrivi-atmospheric-visual__orb--3"></div>
+    </div>
+  </div>
+  
+  <div class="majatrivi-atmospheric-visual__content">
+    <div class="majatrivi-atmospheric-visual__content-inner luxury-fade-in">
+      {% if subheading != blank %}
+        <p class="majatrivi-atmospheric-visual__subheading luxury-eyebrow">{{ subheading }}</p>
+      {% endif %}
+      
+      {% if heading != blank %}
+        <h2 class="majatrivi-atmospheric-visual__heading luxury-heading-xl">{{ heading }}</h2>
+      {% endif %}
+      
+      {% if text_content != blank %}
+        <div class="majatrivi-atmospheric-visual__text luxury-text-lg">
+          {{ text_content }}
+        </div>
+      {% endif %}
+      
+      {% if button_text != blank and button_link != blank %}
+        <div class="majatrivi-atmospheric-visual__button-wrapper">
+          <a href="{{ button_link }}" class="majatrivi-atmospheric-visual__button luxury-btn luxury-btn--outline">
+            {{ button_text }}
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M10 3L17 10L10 17M17 10H3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .majatrivi-atmospheric-visual {
+    position: relative;
+    height: 100vh;
+    min-height: 700px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #0a0a0a;
+  }
+  
+  .majatrivi-atmospheric-visual__media {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+  
+  .majatrivi-atmospheric-visual__image-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+  
+  .majatrivi-atmospheric-visual__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: contrast(1.1) brightness(0.9);
+  }
+  
+  .majatrivi-atmospheric-visual__gradient {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      #0a0a0a 0%,
+      #1a1a2e 25%,
+      #16213e 50%,
+      #0f0f23 75%,
+      #0a0a0a 100%
+    );
+    position: relative;
+  }
+  
+  .majatrivi-atmospheric-visual__gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+      ellipse at 30% 60%,
+      rgba(100, 100, 200, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 70% 30%,
+      rgba(150, 100, 200, 0.08) 0%,
+      transparent 50%
+    );
+  }
+  
+  /* Atmospheric Effects */
+  .majatrivi-atmospheric-visual__effects {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+  }
+  
+  .majatrivi-atmospheric-visual__particle {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: float 20s infinite linear;
+  }
+  
+  .majatrivi-atmospheric-visual__particle--1 {
+    width: 4px;
+    height: 4px;
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+    animation-duration: 25s;
+  }
+  
+  .majatrivi-atmospheric-visual__particle--2 {
+    width: 6px;
+    height: 6px;
+    top: 60%;
+    left: 80%;
+    animation-delay: 5s;
+    animation-duration: 30s;
+  }
+  
+  .majatrivi-atmospheric-visual__particle--3 {
+    width: 3px;
+    height: 3px;
+    top: 40%;
+    left: 60%;
+    animation-delay: 10s;
+    animation-duration: 20s;
+  }
+  
+  .majatrivi-atmospheric-visual__particle--4 {
+    width: 5px;
+    height: 5px;
+    top: 80%;
+    left: 20%;
+    animation-delay: 15s;
+    animation-duration: 35s;
+  }
+  
+  .majatrivi-atmospheric-visual__particle--5 {
+    width: 4px;
+    height: 4px;
+    top: 30%;
+    left: 90%;
+    animation-delay: 8s;
+    animation-duration: 28s;
+  }
+  
+  .majatrivi-atmospheric-visual__particle--6 {
+    width: 7px;
+    height: 7px;
+    top: 70%;
+    left: 40%;
+    animation-delay: 12s;
+    animation-duration: 22s;
+  }
+  
+  /* Floating Orbs */
+  .majatrivi-atmospheric-visual__floating-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+  }
+  
+  .majatrivi-atmospheric-visual__orb {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+    animation: pulse 8s infinite ease-in-out;
+  }
+  
+  .majatrivi-atmospheric-visual__orb--1 {
+    width: 200px;
+    height: 200px;
+    top: 15%;
+    right: 10%;
+    animation-delay: 0s;
+  }
+  
+  .majatrivi-atmospheric-visual__orb--2 {
+    width: 150px;
+    height: 150px;
+    bottom: 20%;
+    left: 5%;
+    animation-delay: 3s;
+  }
+  
+  .majatrivi-atmospheric-visual__orb--3 {
+    width: 100px;
+    height: 100px;
+    top: 50%;
+    left: 70%;
+    animation-delay: 6s;
+  }
+  
+  /* Content */
+  .majatrivi-atmospheric-visual__content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    color: #ffffff;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  
+  .majatrivi-atmospheric-visual__content-inner {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  
+  .majatrivi-atmospheric-visual__content-inner.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .majatrivi-atmospheric-visual__subheading {
+    margin: 0 0 1.5rem 0;
+    opacity: 0.8;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .majatrivi-atmospheric-visual__heading {
+    margin: 0 0 2rem 0;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .majatrivi-atmospheric-visual__text {
+    margin: 0 0 3rem 0;
+    opacity: 0.9;
+    color: rgba(255, 255, 255, 0.85);
+  }
+  
+  .majatrivi-atmospheric-visual__text p {
+    margin: 0 0 1.5rem 0;
+  }
+  
+  .majatrivi-atmospheric-visual__text p:last-child {
+    margin-bottom: 0;
+  }
+  
+  .majatrivi-atmospheric-visual__button-wrapper {
+    margin-top: 2rem;
+  }
+  
+  .majatrivi-atmospheric-visual__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+  }
+  
+  .majatrivi-atmospheric-visual__button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  .majatrivi-atmospheric-visual__button svg {
+    transition: transform 0.3s ease;
+  }
+  
+  .majatrivi-atmospheric-visual__button:hover svg {
+    transform: translateX(5px);
+  }
+  
+  /* Animation Styles */
+  .majatrivi-atmospheric-visual--ethereal {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+  }
+  
+  .majatrivi-atmospheric-visual--cosmic {
+    background: linear-gradient(135deg, #0a0a0a 0%, #2d1b69 50%, #11998e 100%);
+  }
+  
+  .majatrivi-atmospheric-visual--minimal {
+    background: linear-gradient(135deg, #f8f8f8 0%, #e0e0e0 100%);
+  }
+  
+  .majatrivi-atmospheric-visual--minimal .majatrivi-atmospheric-visual__content {
+    color: #0a0a0a;
+  }
+  
+  .majatrivi-atmospheric-visual--minimal .majatrivi-atmospheric-visual__heading {
+    background: linear-gradient(135deg, #0a0a0a 0%, #2d2d2d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .majatrivi-atmospheric-visual--minimal .majatrivi-atmospheric-visual__button {
+    color: #0a0a0a;
+    border-color: rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.5);
+  }
+  
+  /* Animations */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px) translateX(0px);
+      opacity: 0.1;
+    }
+    25% {
+      transform: translateY(-20px) translateX(10px);
+      opacity: 0.3;
+    }
+    50% {
+      transform: translateY(-10px) translateX(-5px);
+      opacity: 0.2;
+    }
+    75% {
+      transform: translateY(-30px) translateX(15px);
+      opacity: 0.4;
+    }
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 0.1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.3;
+      transform: scale(1.1);
+    }
+  }
+  
+  /* Reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .majatrivi-atmospheric-visual__particle,
+    .majatrivi-atmospheric-visual__orb {
+      animation: none;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .majatrivi-atmospheric-visual {
+      min-height: 80vh;
+    }
+    
+    .majatrivi-atmospheric-visual__content {
+      padding: 0 1rem;
+    }
+    
+    .majatrivi-atmospheric-visual__content-inner {
+      max-width: 100%;
+    }
+    
+    .majatrivi-atmospheric-visual__orb {
+      display: none;
+    }
+    
+    .majatrivi-atmospheric-visual__particle {
+      opacity: 0.5;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Atmospheric Visual",
+  "tag": "section",
+  "class": "majatrivi-atmospheric-visual-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Experience"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Beyond Fashion"
+    },
+    {
+      "type": "richtext",
+      "id": "text_content",
+      "label": "Text Content",
+      "default": "<p>Step into a realm where clothing becomes art, where every thread tells a story of innovation and craftsmanship. Our designs transcend the ordinary, creating pieces that exist in perfect harmony between function and beauty.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Explore Collection"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Visual Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image",
+      "info": "Optional. Leave empty for gradient background"
+    },
+    {
+      "type": "select",
+      "id": "visual_style",
+      "label": "Visual Style",
+      "options": [
+        {
+          "value": "ethereal",
+          "label": "Ethereal (Dark)"
+        },
+        {
+          "value": "cosmic",
+          "label": "Cosmic (Colorful)"
+        },
+        {
+          "value": "minimal",
+          "label": "Minimal (Light)"
+        }
+      ],
+      "default": "ethereal"
+    },
+    {
+      "type": "select",
+      "id": "animation_style",
+      "label": "Animation Style",
+      "options": [
+        {
+          "value": "subtle",
+          "label": "Subtle"
+        },
+        {
+          "value": "dynamic",
+          "label": "Dynamic"
+        },
+        {
+          "value": "none",
+          "label": "No Animation"
+        }
+      ],
+      "default": "subtle"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atmospheric Visual",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}

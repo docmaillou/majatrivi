@@ -1,0 +1,465 @@
+{% comment %}
+  MAJATRIVI Logo System Showcase
+  Demonstrates the adaptive logo system in different contexts
+{% endcomment %}
+
+<section class="majatrivi-logo-showcase luxury-section" data-section-id="{{ section.id }}">
+  <div class="luxury-container">
+    
+    <!-- Section Header -->
+    <div class="majatrivi-logo-showcase__header luxury-spacing-lg">
+      <h2 class="luxury-heading-lg majatrivi-text-reveal" data-text-reveal>
+        <span class="reveal-line">MAJATRIVI</span>
+        <span class="reveal-line">Logo System</span>
+      </h2>
+      <p class="luxury-text-lg luxury-fade-in">
+        Adaptive branding that transforms from bold statement to elegant symbol
+      </p>
+    </div>
+
+    <!-- Logo States Grid -->
+    <div class="majatrivi-logo-showcase__grid luxury-grid luxury-grid--2">
+      
+      <!-- Full Logo State -->
+      <div class="majatrivi-logo-showcase__state luxury-card luxury-fade-in">
+        <div class="majatrivi-logo-showcase__demo">
+          <!-- Full Logo Demo -->
+          <div class="majatrivi-logo-demo majatrivi-logo-demo--light">
+            <div class="majatrivi-logo-full" data-demo-logo="full">
+              <span class="majatrivi-logo-text">
+                <span class="majatrivi-logo-letter">M</span>
+                <span class="majatrivi-logo-letter">A</span>
+                <span class="majatrivi-logo-letter">J</span>
+                <span class="majatrivi-logo-letter">A</span>
+                <span class="majatrivi-logo-letter">T</span>
+                <span class="majatrivi-logo-letter">R</span>
+                <span class="majatrivi-logo-letter">I</span>
+                <span class="majatrivi-logo-letter">V</span>
+                <span class="majatrivi-logo-letter">I</span>
+              </span>
+              <div class="majatrivi-logo-underline"></div>
+            </div>
+          </div>
+        </div>
+        <div class="majatrivi-logo-showcase__content">
+          <h3 class="luxury-heading-md">Full Brand</h3>
+          <p class="luxury-text-base">
+            The complete MAJATRIVI wordmark. Used in hero sections, brand introductions, and prominent placements where maximum brand recognition is desired.
+          </p>
+          <ul class="majatrivi-logo-showcase__features">
+            <li>Hero sections</li>
+            <li>Landing pages</li>
+            <li>Brand storytelling</li>
+            <li>Print materials</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Minimal Logo State -->
+      <div class="majatrivi-logo-showcase__state luxury-card luxury-fade-in">
+        <div class="majatrivi-logo-showcase__demo">
+          <!-- Minimal Logo Demo -->
+          <div class="majatrivi-logo-demo majatrivi-logo-demo--dark">
+            <div class="majatrivi-logo-minimal" data-demo-logo="minimal">
+              <svg class="majatrivi-m-symbol" width="60" height="60" viewBox="0 0 40 40" fill="none">
+                <path d="M8 32V12L16 28L24 12V32M8 12L16 4L24 12" 
+                      stroke="currentColor" 
+                      stroke-width="1.5" 
+                      stroke-linecap="round" 
+                      stroke-linejoin="round"
+                      pathLength="1"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="majatrivi-logo-showcase__content">
+          <h3 class="luxury-heading-md">Minimal Symbol</h3>
+          <p class="luxury-text-base">
+            The elegant "M" symbol. Automatically appears in navigation on scroll, perfect for compact spaces while maintaining sophisticated brand presence.
+          </p>
+          <ul class="majatrivi-logo-showcase__features">
+            <li>Navigation scroll state</li>
+            <li>Mobile interfaces</li>
+            <li>Social media profiles</li>
+            <li>Compact applications</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Demo -->
+    <div class="majatrivi-logo-showcase__interactive luxury-spacing-xl">
+      <div class="majatrivi-logo-showcase__demo-header">
+        <h3 class="luxury-heading-md">Interactive Logo Transformation</h3>
+        <p class="luxury-text-base">
+          Experience how the MAJATRIVI logo adapts based on scroll position and context
+        </p>
+      </div>
+      
+      <div class="majatrivi-logo-showcase__demo-container">
+        <div class="majatrivi-logo-demo-interactive" data-logo-transform>
+          <!-- Interactive Logo -->
+          <div class="majatrivi-logo-full" data-logo-state="full">
+            <span class="majatrivi-logo-text">
+              {% for i in (1..9) %}
+                {% assign letter_index = forloop.index0 %}
+                {% assign letters = "MAJATRIVI" | split: "" %}
+                <span class="majatrivi-logo-letter" data-letter="{{ forloop.index }}" style="--letter-delay: {{ letter_index | times: 0.05 }}s">
+                  {{ letters[letter_index] }}
+                </span>
+              {% endfor %}
+            </span>
+            <div class="majatrivi-logo-underline"></div>
+          </div>
+          
+          <div class="majatrivi-logo-minimal" data-logo-state="minimal">
+            <svg class="majatrivi-m-symbol" width="80" height="80" viewBox="0 0 40 40" fill="none">
+              <path d="M8 32V12L16 28L24 12V32M8 12L16 4L24 12" 
+                    stroke="currentColor" 
+                    stroke-width="1.5" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round"
+                    pathLength="1"/>
+            </svg>
+          </div>
+        </div>
+        
+        <!-- Demo Controls -->
+        <div class="majatrivi-logo-showcase__controls">
+          <button class="luxury-btn luxury-btn--outline" data-demo-control="full">
+            Show Full Logo
+          </button>
+          <button class="luxury-btn luxury-btn--outline" data-demo-control="minimal">
+            Show Minimal
+          </button>
+          <button class="luxury-btn luxury-btn--primary" data-demo-control="auto">
+            Auto Transform
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Design Principles -->
+    <div class="majatrivi-logo-showcase__principles luxury-spacing-xl">
+      <h3 class="luxury-heading-md luxury-fade-in">Design Principles</h3>
+      <div class="luxury-grid luxury-grid--3">
+        
+        <div class="majatrivi-logo-showcase__principle luxury-card luxury-fade-in">
+          <div class="majatrivi-logo-showcase__principle-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2L22 8.5V15.5L12 22L2 15.5V8.5L12 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              <path d="M12 8V16M8 10L16 14M8 14L16 10" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <h4 class="luxury-heading-sm">Adaptive</h4>
+          <p class="luxury-text-sm">
+            Seamlessly transforms based on context and user interaction, maintaining brand integrity across all touchpoints.
+          </p>
+        </div>
+
+        <div class="majatrivi-logo-showcase__principle luxury-card luxury-fade-in">
+          <div class="majatrivi-logo-showcase__principle-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M12 8V12L16 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h4 class="luxury-heading-sm">Sophisticated</h4>
+          <p class="luxury-text-sm">
+            Clean, minimal aesthetic with carefully crafted animations that reflect luxury and attention to detail.
+          </p>
+        </div>
+
+        <div class="majatrivi-logo-showcase__principle luxury-card luxury-fade-in">
+          <div class="majatrivi-logo-showcase__principle-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+              <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h4 class="luxury-heading-sm">Performance</h4>
+          <p class="luxury-text-sm">
+            Optimized animations with GPU acceleration and reduced motion support for smooth experiences on all devices.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Demo functionality for logo showcase
+  document.addEventListener('DOMContentLoaded', () => {
+    const demoLogo = document.querySelector('[data-logo-transform]');
+    const controls = document.querySelectorAll('[data-demo-control]');
+    
+    if (!demoLogo || !controls.length) return;
+    
+    let autoInterval;
+    
+    controls.forEach(control => {
+      control.addEventListener('click', () => {
+        const action = control.dataset.demoControl;
+        
+        // Clear any auto interval
+        clearInterval(autoInterval);
+        
+        // Remove active state from all controls
+        controls.forEach(c => c.classList.remove('luxury-btn--primary'));
+        control.classList.add('luxury-btn--primary');
+        
+        switch(action) {
+          case 'full':
+            demoLogo.classList.remove('logo-minimal');
+            break;
+          case 'minimal':
+            demoLogo.classList.add('logo-minimal');
+            break;
+          case 'auto':
+            // Auto transformation demo
+            autoInterval = setInterval(() => {
+              demoLogo.classList.toggle('logo-minimal');
+            }, 2000);
+            break;
+        }
+      });
+    });
+    
+    // Initialize with full logo
+    controls[0].click();
+  });
+</script>
+
+{% stylesheet %}
+  /* ==========================================================================
+     MAJATRIVI Logo Showcase Styles
+     ========================================================================== */
+
+  .majatrivi-logo-showcase {
+    background: linear-gradient(
+      135deg,
+      var(--luxury-cream) 0%,
+      var(--luxury-white) 100%
+    );
+    position: relative;
+    overflow: hidden;
+  }
+
+  .majatrivi-logo-showcase::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 40%;
+    height: 200%;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(212, 175, 55, 0.03) 0%,
+      transparent 70%
+    );
+    animation: float 20s ease-in-out infinite;
+  }
+
+  .majatrivi-logo-showcase__header {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .majatrivi-logo-showcase__grid {
+    margin-bottom: var(--luxury-spacing-xl);
+  }
+
+  .majatrivi-logo-showcase__state {
+    background: var(--luxury-white);
+    border-radius: 12px;
+    padding: var(--luxury-spacing-lg);
+    box-shadow: var(--luxury-shadow-subtle);
+    transition: all var(--luxury-transition-medium);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .majatrivi-logo-showcase__state::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(
+      90deg,
+      var(--luxury-gold) 0%,
+      var(--luxury-gold-dark) 100%
+    );
+  }
+
+  .majatrivi-logo-showcase__demo {
+    margin-bottom: var(--luxury-spacing-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 120px;
+  }
+
+  .majatrivi-logo-demo {
+    padding: var(--luxury-spacing-md);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+  }
+
+  .majatrivi-logo-demo--light {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.8) 0%,
+      rgba(248, 248, 248, 0.9) 100%
+    );
+    color: var(--luxury-black);
+  }
+
+  .majatrivi-logo-demo--dark {
+    background: linear-gradient(
+      135deg,
+      rgba(26, 26, 26, 0.9) 0%,
+      rgba(10, 10, 10, 0.95) 100%
+    );
+    color: var(--luxury-white);
+  }
+
+  .majatrivi-logo-showcase__features {
+    list-style: none;
+    padding: 0;
+    margin: var(--luxury-spacing-sm) 0 0;
+  }
+
+  .majatrivi-logo-showcase__features li {
+    padding: 0.25rem 0;
+    font-size: 0.85rem;
+    color: rgba(0, 0, 0, 0.7);
+    position: relative;
+    padding-left: 1.5rem;
+  }
+
+  .majatrivi-logo-showcase__features li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--luxury-gold);
+    font-weight: 600;
+  }
+
+  /* Interactive Demo */
+  .majatrivi-logo-showcase__interactive {
+    background: var(--luxury-white);
+    border-radius: 12px;
+    padding: var(--luxury-spacing-xl);
+    box-shadow: var(--luxury-shadow-medium);
+    text-align: center;
+  }
+
+  .majatrivi-logo-showcase__demo-header {
+    margin-bottom: var(--luxury-spacing-lg);
+  }
+
+  .majatrivi-logo-demo-interactive {
+    position: relative;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--luxury-spacing-lg);
+    background: linear-gradient(
+      135deg,
+      rgba(248, 248, 248, 0.5) 0%,
+      rgba(255, 255, 255, 0.8) 100%
+    );
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .majatrivi-logo-showcase__controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Design Principles */
+  .majatrivi-logo-showcase__principles {
+    text-align: center;
+  }
+
+  .majatrivi-logo-showcase__principle {
+    text-align: center;
+    padding: var(--luxury-spacing-lg);
+    background: var(--luxury-white);
+    border-radius: 12px;
+    box-shadow: var(--luxury-shadow-subtle);
+  }
+
+  .majatrivi-logo-showcase__principle-icon {
+    margin-bottom: var(--luxury-spacing-sm);
+    color: var(--luxury-gold);
+  }
+
+  .majatrivi-logo-showcase__principle h4 {
+    margin-bottom: var(--luxury-spacing-xs);
+    color: var(--luxury-black);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .majatrivi-logo-showcase__controls {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .majatrivi-logo-showcase__controls .luxury-btn {
+      width: 200px;
+    }
+
+    .majatrivi-logo-demo-interactive {
+      height: 100px;
+    }
+
+    .majatrivi-logo-demo {
+      min-height: 100px;
+    }
+  }
+
+  /* Animation for floating background */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-20px) rotate(2deg);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "MAJATRIVI Logo Showcase",
+  "tag": "section",
+  "class": "logo-showcase-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo Showcase Settings"
+    },
+    {
+      "type": "paragraph",
+      "content": "This section showcases the adaptive MAJATRIVI logo system with interactive demonstrations."
+    }
+  ],
+  "presets": [
+    {
+      "name": "MAJATRIVI Logo Showcase"
+    }
+  ]
+}
+{% endschema %}

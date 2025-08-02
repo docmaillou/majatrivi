@@ -1,0 +1,182 @@
+{% liquid
+  assign menu_classes = 'homepage-menu'
+  
+  if section.settings.text_color == 'white'
+    assign menu_classes = menu_classes | append: ' homepage-menu--white'
+  endif
+%}
+
+<nav class="{{ menu_classes }}" data-section-id="{{ section.id }}">
+  <div class="homepage-menu__inner">
+    {% if section.settings.menu != blank %}
+      <ul class="homepage-menu__list">
+        {% for link in linklists[section.settings.menu].links %}
+          <li class="homepage-menu__item">
+            <a 
+              href="{{ link.url }}" 
+              class="homepage-menu__link"
+              {% if link.current %}aria-current="page"{% endif %}
+            >
+              {{ link.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <ul class="homepage-menu__list">
+        <li class="homepage-menu__item">
+          <a href="/" class="homepage-menu__link" aria-current="page">Accueil</a>
+        </li>
+        <li class="homepage-menu__item">
+          <a href="/collections" class="homepage-menu__link">Collections</a>
+        </li>
+        <li class="homepage-menu__item">
+          <a href="/pages/about" class="homepage-menu__link">À Propos</a>
+        </li>
+        <li class="homepage-menu__item">
+          <a href="/pages/contact" class="homepage-menu__link">Contact</a>
+        </li>
+      </ul>
+    {% endif %}
+  </div>
+</nav>
+
+{% stylesheet %}
+  .homepage-menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4rem 2rem;
+    background: transparent;
+  }
+
+  .homepage-menu__inner {
+    max-width: 800px;
+    width: 100%;
+  }
+
+  .homepage-menu__list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .homepage-menu__link {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    color: var(--color-foreground);
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .homepage-menu__link::before {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--color-foreground);
+    transition: width 0.3s ease;
+  }
+
+  .homepage-menu__link:hover::before,
+  .homepage-menu__link[aria-current="page"]::before {
+    width: 100%;
+  }
+
+  .homepage-menu__link:hover {
+    transform: translateY(-2px);
+  }
+
+  .homepage-menu--white .homepage-menu__link {
+    color: white;
+  }
+
+  .homepage-menu--white .homepage-menu__link::before {
+    background: white;
+  }
+
+  .homepage-menu__item {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s ease forwards;
+  }
+
+  .homepage-menu__item:nth-child(1) { animation-delay: 0.1s; }
+  .homepage-menu__item:nth-child(2) { animation-delay: 0.2s; }
+  .homepage-menu__item:nth-child(3) { animation-delay: 0.3s; }
+  .homepage-menu__item:nth-child(4) { animation-delay: 0.4s; }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .homepage-menu__list {
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .homepage-menu__link {
+      font-size: 1.6rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .homepage-menu__item {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+
+    .homepage-menu__link {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Homepage Menu",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "info": "Select a menu to display"
+    },
+    {
+      "type": "select",
+      "id": "text_color",
+      "label": "Text Color",
+      "options": [
+        {
+          "value": "dark",
+          "label": "Dark"
+        },
+        {
+          "value": "white",
+          "label": "White"
+        }
+      ],
+      "default": "dark"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Homepage Menu"
+    }
+  ]
+}
+{% endschema %}

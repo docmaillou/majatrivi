@@ -1,26 +1,7 @@
-
-
 {% liquid
-  # Minimal header logic for MAJATRIVI luxury theme
-  assign is_homepage = template.name == 'index'
-  assign is_transparent = section.settings.enable_transparent_header
-  assign logo_position = section.settings.logo_position | default: 'left'
-  assign menu_position = section.settings.menu_position | default: 'center'
-  
-  # Build header classes
-  assign header_classes = 'majatrivi-header'
-  
-  if is_transparent
-    assign header_classes = header_classes | append: ' majatrivi-header--transparent'
-  endif
-  
-  if is_homepage
-    assign header_classes = header_classes | append: ' majatrivi-header--home'
-  endif
-  
-  if section.settings.enable_sticky
-    assign header_classes = header_classes | append: ' majatrivi-header--sticky'
-  endif
+  # MAJATRIVI Luxury Header - Adaptive Logo System
+  assign header_classes = 'majatrivi-luxury-header'
+  assign logo_text = 'MAJATRIVI'
 %}
 
 <script type="application/ld+json">
@@ -35,186 +16,162 @@
   }
 </script>
 
-<header class="{{ header_classes }}" id="majatrivi-header" data-section-id="{{ section.id }}">
-  <div class="majatrivi-header__inner">
-    
-    <!-- Logo Section -->
-    <div class="majatrivi-header__logo" data-position="{{ logo_position }}">
-      {% if settings.logo %}
-        <a href="{{ routes.root_url }}" class="majatrivi-header__logo-link">
-          <img 
-            src="{{ settings.logo | image_url: width: 200 }}" 
-            srcset="{{ settings.logo | image_url: width: 200 }} 1x, {{ settings.logo | image_url: width: 400 }} 2x"
-            alt="{{ settings.logo.alt | default: shop.name }}"
-            class="majatrivi-header__logo-image"
-            width="200"
-            height="auto"
-          >
-        </a>
-      {% else %}
-        <a href="{{ routes.root_url }}" class="majatrivi-header__logo-text">
-          {{ shop.name }}
-        </a>
-      {% endif %}
-    </div>
-
-    <!-- Main Navigation -->
-    <nav class="majatrivi-header__nav" data-position="{{ menu_position }}" role="navigation" aria-label="Main navigation">
-      {% if linklists[section.settings.menu].links.size > 0 %}
-        <ul class="majatrivi-header__nav-list">
-          {% for link in linklists[section.settings.menu].links %}
-            <li class="majatrivi-header__nav-item">
-              <a href="{{ link.url }}" class="majatrivi-header__nav-link">
-                {{ link.title }}
-              </a>
-            </li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    </nav>
-
-    <!-- Header Actions -->
-    <div class="majatrivi-header__actions">
-      
-      <!-- Search -->
-      {% if section.settings.show_search %}
-        <button type="button" class="majatrivi-header__action majatrivi-header__search-toggle" aria-label="Search">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.5"/>
-            <path d="m15 15 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-        </button>
-      {% endif %}
-
-      <!-- Account -->
-      {% if shop.customer_accounts_enabled %}
-        <a href="{{ routes.account_url }}" class="majatrivi-header__action majatrivi-header__account" aria-label="Account">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M4 18c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="currentColor" stroke-width="1.5"/>
-          </svg>
-        </a>
-      {% endif %}
-
-      <!-- Cart -->
-      <a href="{{ routes.cart_url }}" class="majatrivi-header__action majatrivi-header__cart" aria-label="Cart ({{ cart.item_count }})">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M5 7h14l-1 8H6L5 7ZM5 7L4 3H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-        {% if cart.item_count > 0 %}
-          <span class="majatrivi-header__cart-count">{{ cart.item_count }}</span>
-        {% endif %}
-      </a>
-
-      <!-- Mobile Menu Toggle -->
-      <button type="button" class="majatrivi-header__mobile-toggle" aria-label="Menu" aria-expanded="false">
-        <span class="majatrivi-header__hamburger">
-          <span></span>
-          <span></span>
-          <span></span>
-        </span>
-      </button>
-    </div>
-  </div>
-
-  <!-- Mobile Navigation -->
-  <div class="majatrivi-header__mobile-nav" aria-hidden="true">
-    <div class="majatrivi-header__mobile-nav-inner">
-      {% if linklists[section.settings.menu].links.size > 0 %}
-        <ul class="majatrivi-header__mobile-nav-list">
-          {% for link in linklists[section.settings.menu].links %}
-            <li class="majatrivi-header__mobile-nav-item">
-              <a href="{{ link.url }}" class="majatrivi-header__mobile-nav-link">
-                {{ link.title }}
-              </a>
-            </li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    </div>
-  </div>
-
-  <!-- Search Modal -->
-  {% if section.settings.show_search %}
-    <div class="majatrivi-header__search-modal" aria-hidden="true">
-      <div class="majatrivi-header__search-modal-inner">
-        <div class="majatrivi-header__search-form">
-          <form action="{{ routes.search_url }}" method="get" class="search-form">
-            <input 
-              type="search" 
-              name="q" 
-              placeholder="Search products..." 
-              class="majatrivi-header__search-input"
-              autocomplete="off"
-            >
-            <button type="submit" class="majatrivi-header__search-submit" aria-label="Submit search">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.5"/>
-                <path d="m15 15 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-            </button>
-          </form>
+<header class="{{ header_classes }}" id="majatrivi-luxury-header" data-section-id="{{ section.id }}">
+  <div class="majatrivi-luxury-header__inner">
+    <!-- MAJATRIVI Adaptive Logo System -->
+    <div class="majatrivi-luxury-header__logo">
+      <a href="{{ routes.root_url }}" class="majatrivi-luxury-header__logo-link" aria-label="{{ shop.name }}">
+        <!-- Full MAJATRIVI Logo -->
+        <div class="majatrivi-logo-full">
+          <span class="majatrivi-logo-letter majatrivi-logo-letter--m">M</span>
+          <span class="majatrivi-logo-letter majatrivi-logo-letter--a1">A</span>
+          <span class="majatrivi-logo-letter majatrivi-logo-letter--j">J</span>
+          <span class="majatrivi-logo-letter majatrivi-logo-letter--a2">A</span>
+          <span class="majatrivi-logo-letter majatrivi-logo-letter--t">T</span>
+          <span class="majatrivi-logo-letter majatrivi-logo-letter--r">R</span>
+          <span class="majatrivi-logo-letter majatrivi-logo-letter--i">I</span>
+          <span class="majatrivi-logo-letter majatrivi-logo-letter--v">V</span>
+          <span class="majatrivi-logo-letter majatrivi-logo-letter--i2">I</span>
         </div>
-        <button type="button" class="majatrivi-header__search-close" aria-label="Close search">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-        </button>
-      </div>
+        
+        <!-- Minimal M Symbol -->
+        <div class="majatrivi-logo-minimal">
+          <div class="majatrivi-m-symbol">
+            <div class="majatrivi-m-symbol__line majatrivi-m-symbol__line--left"></div>
+            <div class="majatrivi-m-symbol__line majatrivi-m-symbol__line--middle"></div>
+            <div class="majatrivi-m-symbol__line majatrivi-m-symbol__line--right"></div>
+          </div>
+        </div>
+      </a>
     </div>
-  {% endif %}
+
+
+    <!-- Social Media Icons -->
+    <div class="majatrivi-luxury-header__social">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'header-menu' %}
+            {%- comment -%} Legacy menu block - no longer used {%- endcomment -%}
+          {% when 'social_link' %}
+            {% if block.settings.social_url != blank %}
+              {% liquid
+                assign platform = block.settings.social_url | split: '//' | last | remove: 'www.' | split: '.' | first
+                assign url_parts = block.settings.social_url | split: '//' | last | split: '/'
+                assign has_profile = false
+                
+                if url_parts.size > 1 and url_parts[1] != ''
+                  assign has_profile = true
+                endif
+              %}
+              
+              {% if has_profile or request.design_mode %}
+                <a 
+                  href="{{ block.settings.social_url }}" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  class="majatrivi-luxury-header__social-link"
+                  aria-label="{{ platform | capitalize }}"
+                  {{ block.shopify_attributes }}
+                  {% unless has_profile %}
+                    {% if request.design_mode %}
+                      onclick="return false;"
+                      aria-disabled="true"
+                    {% endif %}
+                  {% endunless %}
+                >
+                  {% case platform %}
+                    {% when 'instagram' %}
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="majatrivi-luxury-header__social-icon">
+                        <path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8A1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5a5 5 0 0 1-5 5a5 5 0 0 1-5-5a5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3a3 3 0 0 0 3 3a3 3 0 0 0 3-3a3 3 0 0 0-3-3Z" fill="currentColor"/>
+                      </svg>
+                    {% when 'tiktok' %}
+                      <svg width="18" height="20" viewBox="0 0 24 24" fill="none" class="majatrivi-luxury-header__social-icon">
+                        <path d="M9 12a4 4 0 1 0 4 4V9a5 5 0 0 0 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    {% when 'youtube' %}
+                      <svg width="22" height="16" viewBox="0 0 24 24" fill="none" class="majatrivi-luxury-header__social-icon">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="currentColor"/>
+                      </svg>
+                    {% when 'facebook' %}
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="majatrivi-luxury-header__social-icon">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="currentColor"/>
+                      </svg>
+                    {% when 'twitter' %}
+                      <svg width="20" height="18" viewBox="0 0 24 24" fill="none" class="majatrivi-luxury-header__social-icon">
+                        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" fill="currentColor"/>
+                      </svg>
+                    {% when 'linkedin' %}
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="majatrivi-luxury-header__social-icon">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" fill="currentColor"/>
+                      </svg>
+                    {% when 'pinterest' %}
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="majatrivi-luxury-header__social-icon">
+                        <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.097.118.112.223.083.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.746-1.378l-.747 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.624 0 11.99-5.367 11.99-11.987C24.007 5.367 18.641.001 12.017.001z" fill="currentColor"/>
+                      </svg>
+                    {% else %}
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="majatrivi-luxury-header__social-icon">
+                        <circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M12 1c6.075 0 11 4.925 11 11s-4.925 11-11 11S1 18.075 1 12 5.925 1 12 1z" stroke="currentColor" stroke-width="1.5"/>
+                      </svg>
+                    {% endcase %}
+                </a>
+              {% endif %}
+            {% endif %}
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
 </header>
 
 <script
-  src="{{ 'header.js' | asset_url }}"
+  src="{{ 'majatrivi-logo-system.js' | asset_url }}"
   type="module"
 ></script>
 
 {% stylesheet %}
-  /* MAJATRIVI Header Styles */
+  /* ==========================================================================
+     MAJATRIVI Luxury Header - Adaptive Logo System
+     ========================================================================== */
+
+  /* CSS Custom Properties */
   :root {
-    --majatrivi-header-height: 80px;
-    --majatrivi-header-height-mobile: 70px;
+    --header-height: 80px;
+    --header-height-mobile: 70px;
+    --logo-transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    --header-backdrop: transparent;
+    --header-backdrop-scrolled: transparent;
+    --header-text-color: rgba(255, 255, 255, 1);
+    --header-text-color-hover: rgba(255, 255, 255, 0.9);
+    --header-text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   }
 
-  .majatrivi-header {
+  /* Main Header Styles */
+  .majatrivi-luxury-header {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1000;
-    height: var(--majatrivi-header-height);
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  /* Transparent header for homepage */
-  .majatrivi-header--transparent {
+    z-index: 1050;
+    height: var(--header-height);
     background: transparent;
-    border-bottom: none;
     backdrop-filter: none;
+    border-bottom: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .majatrivi-header--transparent .majatrivi-header__inner {
-    color: white;
+  .majatrivi-luxury-header.scrolled {
+    background: transparent !important;
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    /* Override any potential Shopify theme backgrounds */
+    --color-header-background: transparent !important;
+    --color-background: transparent !important;
   }
 
-  /* Scroll state */
-  .majatrivi-header.scrolled {
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.08);
-  }
-
-  .majatrivi-header--transparent.scrolled .majatrivi-header__inner {
-    color: #0a0a0a;
-  }
-
-  /* Header inner container */
-  .majatrivi-header__inner {
+  .majatrivi-luxury-header__inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -222,469 +179,515 @@
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 2rem;
+    background: transparent;
+  }
+
+  /* Ensure complete transparency when scrolled - Override all potential backgrounds */
+  .majatrivi-luxury-header.scrolled .majatrivi-luxury-header__inner {
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+
+  .majatrivi-luxury-header.scrolled,
+  .majatrivi-luxury-header.scrolled * {
+    background-color: transparent !important;
+  }
+
+  /* Specifically target any Shopify theme header overrides */
+  .majatrivi-luxury-header.scrolled::before,
+  .majatrivi-luxury-header.scrolled::after {
+    display: none !important;
+  }
+
+  /* ==========================================================================
+     MAJATRIVI Logo System - Adaptive Transformation
+     ========================================================================== */
+
+  .majatrivi-luxury-header__logo {
     position: relative;
+    z-index: 10;
   }
 
-  /* Logo */
-  .majatrivi-header__logo {
-    flex-shrink: 0;
-    z-index: 1001;
-  }
-
-  .majatrivi-header__logo-link,
-  .majatrivi-header__logo-text {
+  .majatrivi-luxury-header__logo-link {
     display: block;
     text-decoration: none;
-    color: inherit;
-    transition: opacity 0.3s ease;
-  }
-
-  .majatrivi-header__logo-text {
-    font-size: 1.5rem;
-    font-weight: 300;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-
-  .majatrivi-header__logo-image {
-    height: 40px;
-    width: auto;
-    object-fit: contain;
-  }
-
-  .majatrivi-header__logo-link:hover {
-    opacity: 0.8;
-  }
-
-  /* Navigation */
-  .majatrivi-header__nav {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    display: none;
-  }
-
-  .majatrivi-header__nav-list {
-    display: flex;
-    align-items: center;
-    gap: 2.5rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .majatrivi-header__nav-link {
-    color: inherit;
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 400;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
     position: relative;
-    transition: opacity 0.3s ease;
+    overflow: hidden;
+    transition: var(--logo-transition);
   }
 
-  .majatrivi-header__nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 0;
-    height: 1px;
-    background: currentColor;
-    transition: width 0.3s ease;
-  }
-
-  .majatrivi-header__nav-link:hover {
-    opacity: 0.7;
-  }
-
-  .majatrivi-header__nav-link:hover::after {
-    width: 100%;
-  }
-
-  /* Header Actions */
-  .majatrivi-header__actions {
+  /* Full MAJATRIVI Wordmark */
+  .majatrivi-logo-full {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-  }
-
-  .majatrivi-header__action {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    background: none;
-    border: none;
-    color: inherit;
-    text-decoration: none;
-    cursor: pointer;
-    transition: opacity 0.3s ease;
-    position: relative;
-  }
-
-  .majatrivi-header__action:hover {
-    opacity: 0.7;
-  }
-
-  .majatrivi-header__cart-count {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: #0a0a0a;
-    color: white;
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.7rem;
-    font-weight: 500;
-  }
-
-  .majatrivi-header--transparent .majatrivi-header__cart-count {
-    background: white;
-    color: #0a0a0a;
-  }
-
-  /* Mobile Menu Toggle */
-  .majatrivi-header__mobile-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-  }
-
-  .majatrivi-header__hamburger {
-    width: 20px;
-    height: 16px;
-    position: relative;
-  }
-
-  .majatrivi-header__hamburger span {
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: currentColor;
-    transition: all 0.3s ease;
-    transform-origin: center;
-  }
-
-  .majatrivi-header__hamburger span:nth-child(1) {
-    top: 0;
-  }
-
-  .majatrivi-header__hamburger span:nth-child(2) {
-    top: 7px;
-  }
-
-  .majatrivi-header__hamburger span:nth-child(3) {
-    top: 14px;
-  }
-
-  /* Mobile menu active state */
-  .majatrivi-header__mobile-toggle[aria-expanded="true"] .majatrivi-header__hamburger span:nth-child(1) {
-    top: 7px;
-    transform: rotate(45deg);
-  }
-
-  .majatrivi-header__mobile-toggle[aria-expanded="true"] .majatrivi-header__hamburger span:nth-child(2) {
-    opacity: 0;
-  }
-
-  .majatrivi-header__mobile-toggle[aria-expanded="true"] .majatrivi-header__hamburger span:nth-child(3) {
-    top: 7px;
-    transform: rotate(-45deg);
-  }
-
-  /* Mobile Navigation */
-  .majatrivi-header__mobile-nav {
-    position: fixed;
-    top: var(--majatrivi-header-height);
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(20px);
-    transform: translateY(-100%);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 999;
-  }
-
-  .majatrivi-header__mobile-nav[aria-hidden="false"] {
-    transform: translateY(0);
-  }
-
-  .majatrivi-header__mobile-nav-inner {
-    padding: 2rem;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .majatrivi-header__mobile-nav-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-  }
-
-  .majatrivi-header__mobile-nav-item {
-    margin-bottom: 2rem;
-  }
-
-  .majatrivi-header__mobile-nav-link {
-    color: #0a0a0a;
-    text-decoration: none;
-    font-size: 1.5rem;
-    font-weight: 300;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    transition: opacity 0.3s ease;
-  }
-
-  .majatrivi-header__mobile-nav-link:hover {
-    opacity: 0.7;
-  }
-
-  /* Search Modal */
-  .majatrivi-header__search-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(10px);
-    z-index: 1500;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-  }
-
-  .majatrivi-header__search-modal[aria-hidden="false"] {
     opacity: 1;
-    visibility: visible;
+    transform: translateX(0);
+    transition: var(--logo-transition);
   }
 
-  .majatrivi-header__search-modal-inner {
+  .majatrivi-logo-letter {
+    display: inline-block;
+    font-size: clamp(1.8rem, 3vw, 2.2rem);
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    color: var(--header-text-color);
+    text-shadow: var(--header-text-shadow);
+    transform: translateY(0) rotateY(0deg);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+
+  /* Individual letter animations on hover */
+  .majatrivi-luxury-header__logo-link:hover .majatrivi-logo-letter {
+    color: rgba(212, 175, 55, 0.9);
+  }
+
+  .majatrivi-luxury-header__logo-link:hover .majatrivi-logo-letter--m {
+    transform: translateY(-2px) rotateY(5deg);
+    transition-delay: 0s;
+  }
+
+  .majatrivi-luxury-header__logo-link:hover .majatrivi-logo-letter--a1 {
+    transform: translateY(-1px) rotateY(-3deg);
+    transition-delay: 0.05s;
+  }
+
+  .majatrivi-luxury-header__logo-link:hover .majatrivi-logo-letter--j {
+    transform: translateY(-3px) rotateY(4deg);
+    transition-delay: 0.1s;
+  }
+
+  .majatrivi-luxury-header__logo-link:hover .majatrivi-logo-letter--a2 {
+    transform: translateY(-1px) rotateY(-2deg);
+    transition-delay: 0.15s;
+  }
+
+  .majatrivi-luxury-header__logo-link:hover .majatrivi-logo-letter--t {
+    transform: translateY(-2px) rotateY(3deg);
+    transition-delay: 0.2s;
+  }
+
+  .majatrivi-luxury-header__logo-link:hover .majatrivi-logo-letter--r {
+    transform: translateY(-1px) rotateY(-4deg);
+    transition-delay: 0.25s;
+  }
+
+  .majatrivi-luxury-header__logo-link:hover .majatrivi-logo-letter--i {
+    transform: translateY(-3px) rotateY(2deg);
+    transition-delay: 0.3s;
+  }
+
+  .majatrivi-luxury-header__logo-link:hover .majatrivi-logo-letter--v {
+    transform: translateY(-1px) rotateY(-3deg);
+    transition-delay: 0.35s;
+  }
+
+  .majatrivi-luxury-header__logo-link:hover .majatrivi-logo-letter--i2 {
+    transform: translateY(-2px) rotateY(5deg);
+    transition-delay: 0.4s;
+  }
+
+  /* Minimal M Symbol */
+  .majatrivi-logo-minimal {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%) scale(0.3);
+    opacity: 0;
+    transition: var(--logo-transition);
+  }
+
+  .majatrivi-m-symbol {
+    position: relative;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
-    padding: 2rem;
-    position: relative;
   }
 
-  .majatrivi-header__search-form {
-    max-width: 600px;
-    width: 100%;
+  .majatrivi-m-symbol__line {
+    position: absolute;
+    background: var(--header-text-color);
+    border-radius: 1px;
+    filter: drop-shadow(var(--header-text-shadow));
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .search-form {
-    position: relative;
+  .majatrivi-m-symbol__line--left {
+    width: 2px;
+    height: 20px;
+    left: 8px;
+    transform: rotate(0deg);
+  }
+
+  .majatrivi-m-symbol__line--middle {
+    width: 2px;
+    height: 14px;
+    left: 17px;
+    transform: rotate(0deg);
+  }
+
+  .majatrivi-m-symbol__line--right {
+    width: 2px;
+    height: 20px;
+    right: 8px;
+    transform: rotate(0deg);
+  }
+
+  /* Scrolled State - Logo Transformation & Social Icons */
+  .majatrivi-luxury-header.scrolled .majatrivi-logo-full {
+    opacity: 0;
+    transform: translateX(-20px) scale(0.8);
+  }
+
+  .majatrivi-luxury-header.scrolled .majatrivi-logo-minimal {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+
+  .majatrivi-luxury-header.scrolled .majatrivi-m-symbol__line {
+    background: var(--header-text-color);
+    /* Enhanced visibility on all backgrounds */
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 6px rgba(0, 0, 0, 0.4));
+  }
+
+  /* Enhanced contrast for logo when scrolled */
+  .majatrivi-luxury-header.scrolled .majatrivi-logo-minimal {
+    filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.6));
+  }
+
+  /* Hide social icons when scrolled for minimal look */
+  .majatrivi-luxury-header.scrolled .majatrivi-luxury-header__social {
+    opacity: 0.3;
+    transform: scale(0.8);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.7));
+  }
+
+  .majatrivi-luxury-header.scrolled .majatrivi-luxury-header__social:hover {
+    opacity: 1;
+    transform: scale(1);
+    filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.8));
+  }
+
+  /* Enhanced contrast for social icons when scrolled */
+  .majatrivi-luxury-header.scrolled .majatrivi-luxury-header__social-icon {
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8));
+  }
+
+  /* Logo hover effect when scrolled */
+  .majatrivi-luxury-header.scrolled .majatrivi-luxury-header__logo-link:hover .majatrivi-m-symbol__line {
+    background: rgba(212, 175, 55, 0.9);
+  }
+
+  .majatrivi-luxury-header.scrolled .majatrivi-luxury-header__logo-link:hover .majatrivi-m-symbol__line--left {
+    transform: rotate(-5deg) translateX(-1px);
+  }
+
+  .majatrivi-luxury-header.scrolled .majatrivi-luxury-header__logo-link:hover .majatrivi-m-symbol__line--right {
+    transform: rotate(5deg) translateX(1px);
+  }
+
+  .majatrivi-luxury-header.scrolled .majatrivi-luxury-header__logo-link:hover .majatrivi-m-symbol__line--middle {
+    transform: scale(1.1);
+  }
+
+
+  /* ==========================================================================
+     Social Media Icons
+     ========================================================================== */
+
+  .majatrivi-luxury-header__social {
     display: flex;
     align-items: center;
+    gap: 1.2rem;
   }
 
-  .majatrivi-header__search-input {
-    width: 100%;
-    height: 60px;
-    padding: 0 60px 0 0;
-    border: none;
-    background: white;
-    font-size: 1.2rem;
-    font-weight: 300;
-    letter-spacing: 0.02em;
-    border-radius: 0;
-    outline: none;
-  }
-
-  .majatrivi-header__search-input::placeholder {
-    color: #666;
-  }
-
-  .majatrivi-header__search-submit {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 60px;
-    height: 60px;
-    background: #0a0a0a;
-    border: none;
-    color: white;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-
-  .majatrivi-header__search-submit:hover {
-    background: #2d2d2d;
-  }
-
-  .majatrivi-header__search-close {
-    position: absolute;
-    top: 2rem;
-    right: 2rem;
+  .majatrivi-luxury-header__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 44px;
     height: 44px;
-    background: none;
+    color: var(--header-text-color);
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border-radius: 50%;
+    background: transparent;
+    backdrop-filter: none;
     border: none;
-    color: white;
-    cursor: pointer;
-    transition: opacity 0.3s ease;
+    position: relative;
   }
 
-  .majatrivi-header__search-close:hover {
-    opacity: 0.7;
+  .majatrivi-luxury-header__social-link:hover {
+    color: rgba(255, 255, 255, 1);
+    background: transparent;
+    border: none;
+    transform: translateY(-1px) scale(1.08);
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.25));
   }
 
-  /* Desktop Navigation */
-  @media (min-width: 1024px) {
-    .majatrivi-header__nav {
-      display: block;
+  .majatrivi-luxury-header__social-icon {
+    fill: currentColor;
+    filter: drop-shadow(var(--header-text-shadow));
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 0.9;
+  }
+
+  .majatrivi-luxury-header__social-link:hover .majatrivi-luxury-header__social-icon {
+    opacity: 1;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
+  }
+
+  /* ==========================================================================
+     Responsive Design
+     ========================================================================== */
+
+  @media (max-width: 1024px) {
+    .majatrivi-luxury-header__inner {
+      padding: 0 1.5rem;
     }
 
-    .majatrivi-header__mobile-toggle {
-      display: none;
+    .majatrivi-luxury-header__social {
+      gap: 1rem;
     }
   }
 
-  /* Mobile Styles */
-  @media (max-width: 1023px) {
-    .majatrivi-header {
-      height: var(--majatrivi-header-height-mobile);
+  @media (max-width: 768px) {
+    :root {
+      --header-height: var(--header-height-mobile);
     }
 
-    .majatrivi-header__inner {
+    .majatrivi-luxury-header__inner {
       padding: 0 1rem;
     }
 
-    .majatrivi-header__logo-image {
-      height: 35px;
+    .majatrivi-logo-letter {
+      font-size: clamp(1.5rem, 4vw, 1.8rem);
+      letter-spacing: 0.06em;
     }
 
-    .majatrivi-header__actions {
-      gap: 1rem;
+    .majatrivi-m-symbol {
+      width: 32px;
+      height: 32px;
     }
 
-    .majatrivi-header__mobile-nav {
-      top: var(--majatrivi-header-height-mobile);
+    .majatrivi-m-symbol__line--left,
+    .majatrivi-m-symbol__line--right {
+      height: 18px;
+    }
+
+    .majatrivi-m-symbol__line--middle {
+      height: 12px;
+    }
+
+    .majatrivi-luxury-header__social {
+      gap: 0.8rem;
+    }
+
+    .majatrivi-luxury-header__social-link {
+      width: 40px;
+      height: 40px;
+      background: transparent;
+      border: none;
     }
   }
 
-  /* Body offset for fixed header */
-  body {
-    padding-top: var(--majatrivi-header-height);
-  }
+  @media (max-width: 480px) {
+    .majatrivi-logo-letter {
+      font-size: clamp(1.3rem, 5vw, 1.6rem);
+      letter-spacing: 0.04em;
+    }
 
-  @media (max-width: 1023px) {
-    body {
-      padding-top: var(--majatrivi-header-height-mobile);
+    .majatrivi-luxury-header__social {
+      gap: 0.6rem;
+    }
+
+    .majatrivi-luxury-header__social-link {
+      width: 36px;
+      height: 36px;
+      background: transparent;
+      border: none;
     }
   }
 
-  /* Remove body offset for transparent header on homepage */
-  .template-index .majatrivi-header--transparent ~ main {
-    margin-top: calc(-1 * var(--majatrivi-header-height));
+  /* ==========================================================================
+     Performance Optimizations
+     ========================================================================== */
+
+  .majatrivi-logo-letter,
+  .majatrivi-m-symbol,
+  .majatrivi-logo-full,
+  .majatrivi-logo-minimal {
+    transform: translateZ(0);
+    will-change: transform, opacity;
+    backface-visibility: hidden;
   }
 
-  @media (max-width: 1023px) {
-    .template-index .majatrivi-header--transparent ~ main {
-      margin-top: calc(-1 * var(--majatrivi-header-height-mobile));
+  /* Reduced Motion Support */
+  @media (prefers-reduced-motion: reduce) {
+    .majatrivi-logo-letter,
+    .majatrivi-m-symbol__line,
+    .majatrivi-luxury-header__social-link {
+      transition: none !important;
+    }
+
+    .majatrivi-luxury-header__logo-link:hover .majatrivi-logo-letter {
+      transform: none !important;
+    }
+  }
+
+  /* Clear Header Design - Shopify App Compatibility */
+  .majatrivi-luxury-header {
+    /* Ensure header stays above Shopify apps */
+    z-index: 1050 !important;
+    /* Force complete transparency for base state */
+    isolation: isolate;
+  }
+  
+  /* Prevent Shopify apps from interfering with header transparency */
+  .majatrivi-luxury-header:not(.scrolled) {
+    background: transparent !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Ultra-strong transparency override for scrolled state */
+  .majatrivi-luxury-header.scrolled {
+    /* Remove all possible background sources */
+    background-image: none !important;
+    background-attachment: initial !important;
+    background-origin: initial !important;
+    background-clip: initial !important;
+    background-size: initial !important;
+    background-repeat: initial !important;
+    background-position: initial !important;
+    
+    /* Force transparency with multiple methods */  
+    background: rgba(0, 0, 0, 0) !important;
+    background-color: rgba(0, 0, 0, 0) !important;
+    
+    /* Remove any borders or outlines */
+    border: none !important;
+    outline: none !important;
+    
+    /* Ensure no box shadow */
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    
+    /* Remove backdrop filters completely */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  
+  /* Override any inherited backgrounds from parent elements */
+  header.majatrivi-luxury-header.scrolled {
+    background: transparent !important;
+  }
+  
+  /* Shopify cart drawer compatibility */
+  .cart-drawer-open .majatrivi-luxury-header {
+    z-index: 999;
+  }
+
+  /* Enhanced text clarity - Always visible over video backgrounds */
+  .majatrivi-luxury-header.scrolled .majatrivi-luxury-header__nav-link,
+  .majatrivi-luxury-header.scrolled .majatrivi-logo-letter {
+    text-shadow: none;
+  }
+
+  /* Ensure proper body spacing - Shopify app safe */
+  body:not(.shopify-design-mode) {
+    padding-top: var(--header-height);
+  }
+  
+  /* Design mode compatibility */
+  .shopify-design-mode body {
+    padding-top: var(--header-height) !important;
+  }
+
+  @media (max-width: 768px) {
+    body:not(.shopify-design-mode) {
+      padding-top: var(--header-height-mobile);
+    }
+    
+    .shopify-design-mode body {
+      padding-top: var(--header-height-mobile) !important;
     }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "MAJATRIVI Header",
+  "name": "MAJATRIVI Luxury Header",
   "tag": "header",
-  "class": "header-section",
+  "class": "luxury-header-section",
   "settings": [
     {
       "type": "header",
-      "content": "Layout"
+      "content": "MAJATRIVI Logo System"
     },
     {
-      "type": "select",
-      "id": "logo_position",
-      "label": "Logo Position",
-      "options": [
-        {
-          "value": "left",
-          "label": "Left"
-        },
-        {
-          "value": "center",
-          "label": "Center"
-        }
-      ],
-      "default": "left"
-    },
-    {
-      "type": "select",
-      "id": "menu_position",
-      "label": "Menu Position",
-      "options": [
-        {
-          "value": "left",
-          "label": "Left"
-        },
-        {
-          "value": "center",
-          "label": "Center"
-        },
-        {
-          "value": "right",
-          "label": "Right"
-        }
-      ],
-      "default": "center"
-    },
-    {
-      "type": "link_list",
-      "id": "menu",
-      "label": "Menu",
-      "default": "main-menu"
+      "type": "paragraph",
+      "content": "Adaptive logo system that transforms from full MAJATRIVI wordmark to clean M symbol on scroll. Includes navigation and social media integration."
     },
     {
       "type": "header",
-      "content": "Features"
+      "content": "Social Media"
     },
     {
-      "type": "checkbox",
-      "id": "show_search",
-      "label": "Show search",
-      "default": true
+      "type": "paragraph",
+      "content": "Add social media links using the blocks below. Icons will be displayed in the header."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "header-menu",
+      "name": "Menu (Legacy)",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "This block type is no longer used. Please remove it and use the new header design."
+        }
+      ]
     },
     {
-      "type": "checkbox",
-      "id": "enable_transparent_header",
-      "label": "Enable transparent header on homepage",
-      "default": true,
-      "info": "Makes header invisible over hero content"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_sticky",
-      "label": "Enable sticky header",
-      "default": true,
-      "info": "Header stays fixed when scrolling"
+      "type": "social_link",
+      "name": "Social Link",
+      "settings": [
+        {
+          "type": "url",
+          "id": "social_url",
+          "label": "Social Media URL",
+          "info": "Enter the full URL to your social media profile"
+        }
+      ]
     }
   ],
   "presets": [
     {
-      "name": "MAJATRIVI Header"
+      "name": "MAJATRIVI Luxury Header",
+      "blocks": [
+        {
+          "type": "social_link",
+          "settings": {
+            "social_url": "https://instagram.com/"
+          }
+        },
+        {
+          "type": "social_link",
+          "settings": {
+            "social_url": "https://facebook.com/"
+          }
+        },
+        {
+          "type": "social_link",
+          "settings": {
+            "social_url": "https://youtube.com/test"
+          }
+        }
+      ]
     }
   ]
 }

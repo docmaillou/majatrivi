@@ -10,73 +10,56 @@
 %}
 
 <section 
-  id="LuxuryHero-{{ section.id }}" 
-  class="luxury-hero color-{{ section.settings.color_scheme }}"
+  id="MajatriviHero-{{ section.id }}" 
+  class="majatrivi-hero"
   data-section-id="{{ section.id }}"
 >
-  <div class="luxury-hero__media-wrapper">
+  <div class="majatrivi-hero__media">
     {% if video_url != blank %}
       <video 
-        class="luxury-hero__video"
+        class="majatrivi-hero__video"
         autoplay 
         muted 
         loop 
         playsinline
+        preload="metadata"
         poster="{% if fallback_image != blank %}{{ fallback_image | image_url: width: 1920 }}{% endif %}"
       >
         <source src="{{ video_url }}" type="video/mp4">
         {% if fallback_image != blank %}
-          {{ fallback_image | image_url: width: 1920 | image_tag: class: 'luxury-hero__fallback-image' }}
+          {{ fallback_image | image_url: width: 1920 | image_tag: class: 'majatrivi-hero__fallback' }}
         {% endif %}
       </video>
     {% elsif fallback_image != blank %}
-      {{ fallback_image | image_url: width: 1920 | image_tag: class: 'luxury-hero__image' }}
-    {% else %}
-      <div class="luxury-hero__placeholder">
-        {{ 'hero-apparel-1' | placeholder_svg_tag: 'luxury-hero__placeholder-svg' }}
-      </div>
+      {{ fallback_image | image_url: width: 1920 | image_tag: class: 'majatrivi-hero__image' }}
     {% endif %}
     
     {% if show_overlay %}
-      <div class="luxury-hero__overlay" style="opacity: {{ overlay_opacity | divided_by: 100.0 }}"></div>
+      <div class="majatrivi-hero__overlay" style="opacity: {{ overlay_opacity | divided_by: 100.0 }}"></div>
     {% endif %}
   </div>
   
-  <div class="luxury-hero__content">
-    <div class="luxury-hero__content-inner">
-      {% if heading != blank %}
-        <h1 class="luxury-hero__heading">{{ heading }}</h1>
-      {% endif %}
-      
-      {% if subheading != blank %}
-        <p class="luxury-hero__subheading">{{ subheading }}</p>
-      {% endif %}
-      
-      {% if button_text != blank and button_link != blank %}
-        <div class="luxury-hero__button-wrapper">
-          <a href="{{ button_link }}" class="luxury-hero__button btn">
-            {{ button_text }}
-            <svg class="luxury-hero__button-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M8 1L15 8L8 15M15 8H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-        </div>
-      {% endif %}
-    </div>
+  <div class="majatrivi-hero__flowing-bg"></div>
+  
+  <div class="majatrivi-hero__content">
+    {% if heading != blank %}
+      <h1 class="majatrivi-hero__title">{{ heading }}</h1>
+    {% endif %}
     
-    <div class="luxury-hero__scroll-indicator">
-      <div class="luxury-hero__scroll-text">Scroll to explore</div>
-      <div class="luxury-hero__scroll-arrow">
-        <svg width="12" height="16" viewBox="0 0 12 16" fill="none">
-          <path d="M6 1V15M6 15L1 10M6 15L11 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-    </div>
+    {% if subheading != blank %}
+      <p class="majatrivi-hero__subtitle">{{ subheading }}</p>
+    {% endif %}
+    
+    {% if button_text != blank and button_link != blank %}
+      <a href="{{ button_link }}" class="majatrivi-hero__cta luxury-btn-premium">
+        {{ button_text }}
+      </a>
+    {% endif %}
   </div>
 </section>
 
 {% stylesheet %}
-  .luxury-hero {
+  .majatrivi-hero {
     position: relative;
     height: 100vh;
     min-height: 600px;
@@ -87,7 +70,7 @@
     background: #000;
   }
   
-  .luxury-hero__media-wrapper {
+  .majatrivi-hero__media {
     position: absolute;
     top: 0;
     left: 0;
@@ -96,114 +79,145 @@
     z-index: 1;
   }
   
-  .luxury-hero__video,
-  .luxury-hero__image,
-  .luxury-hero__fallback-image {
+  .majatrivi-hero__video,
+  .majatrivi-hero__image,
+  .majatrivi-hero__fallback {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
   }
   
-  .luxury-hero__placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
-  }
-  
-  .luxury-hero__placeholder-svg {
-    width: 200px;
-    height: 200px;
-    opacity: 0.3;
-  }
-  
-  .luxury-hero__overlay {
+  .majatrivi-hero__overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-      135deg, 
-      rgba(0, 0, 0, 0.4) 0%, 
-      rgba(0, 0, 0, 0.2) 50%, 
-      rgba(0, 0, 0, 0.6) 100%
-    );
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.4) 100%);
     z-index: 2;
   }
   
-  .luxury-hero__content {
-    position: relative;
+  .majatrivi-hero__flowing-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: 3;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+  
+  .majatrivi-hero__flowing-bg::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: -20%;
+    width: 140%;
+    height: 140%;
+    background: radial-gradient(
+      circle at 30% 70%,
+      rgba(212, 175, 55, 0.08) 0%,
+      rgba(212, 175, 55, 0.03) 30%,
+      transparent 60%
+    );
+    animation: majatrivi-flow-1 20s ease-in-out infinite;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+  }
+  
+  .majatrivi-hero__flowing-bg::after {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -30%;
+    width: 160%;
+    height: 160%;
+    background: radial-gradient(
+      circle at 70% 30%,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(255, 255, 255, 0.02) 40%,
+      transparent 70%
+    );
+    animation: majatrivi-flow-2 25s ease-in-out infinite reverse;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+  }
+  
+  .majatrivi-hero__content {
+    position: relative;
+    z-index: 4;
     text-align: center;
     color: #fff;
     max-width: 800px;
     margin: 0 auto;
     padding: 0 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-  }
-  
-  .luxury-hero__content-inner {
-    margin-bottom: 8rem;
-  }
-  
-  .luxury-hero__heading {
-    font-size: clamp(3rem, 8vw, 6rem);
-    font-weight: 300;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
-    margin: 0 0 1.5rem 0;
-    text-transform: uppercase;
-    font-family: var(--font-primary--family);
     opacity: 0;
-    transform: translateY(30px);
-    animation: fadeInUp 1s ease-out 0.5s forwards;
+    pointer-events: none;
   }
   
-  .luxury-hero__subheading {
-    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  .majatrivi-hero__content:has(.majatrivi-hero__title:not(:empty)),
+  .majatrivi-hero__content:has(.majatrivi-hero__subtitle:not(:empty)),
+  .majatrivi-hero__content:has(.majatrivi-hero__cta) {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  .majatrivi-hero__title {
+    font-size: clamp(4rem, 10vw, 8rem);
+    font-weight: 200;
+    letter-spacing: -0.02em;
+    line-height: 0.85;
+    margin: 0 0 2rem 0;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #ffffff 0%, #ffffff 60%, rgba(212, 175, 55, 0.9) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0;
+    transform: translateY(40px);
+    animation: majatrivi-title-reveal 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
+  }
+  
+  .majatrivi-hero__subtitle {
+    font-size: clamp(1rem, 2vw, 1.2rem);
     font-weight: 300;
     line-height: 1.6;
-    margin: 0 0 3rem 0;
-    max-width: 600px;
+    margin: 0 0 4rem 0;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    color: rgba(255, 255, 255, 0.85);
     opacity: 0;
     transform: translateY(30px);
-    animation: fadeInUp 1s ease-out 0.8s forwards;
+    animation: majatrivi-subtitle-reveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s forwards;
   }
   
-  .luxury-hero__button-wrapper {
-    opacity: 0;
-    transform: translateY(30px);
-    animation: fadeInUp 1s ease-out 1.1s forwards;
-  }
-  
-  .luxury-hero__button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
+  .majatrivi-hero__cta {
+    display: inline-block;
     padding: 1rem 2.5rem;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: #fff;
     text-decoration: none;
-    font-size: 1rem;
-    font-weight: 400;
-    letter-spacing: 0.05em;
+    font-size: 0.9rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    backdrop-filter: blur(20px);
+    border-radius: 2px;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: relative;
     overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: majatrivi-cta-reveal 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.5s forwards;
+    will-change: transform;
+    backface-visibility: hidden;
   }
   
-  .luxury-hero__button::before {
+  .majatrivi-hero__cta::before {
     content: '';
     position: absolute;
     top: 0;
@@ -211,126 +225,125 @@
     width: 100%;
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transition: left 0.5s ease;
+    transition: left 0.6s ease;
   }
   
-  .luxury-hero__button:hover::before {
+  .majatrivi-hero__cta:hover::before {
     left: 100%;
   }
   
-  .luxury-hero__button:hover {
-    background: rgba(255, 255, 255, 0.15);
+  .majatrivi-hero__cta:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.12);
     border-color: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   }
   
-  .luxury-hero__button-arrow {
-    transition: transform 0.3s ease;
+  @keyframes majatrivi-flow-1 {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.6;
+    }
+    33% {
+      transform: translate(20px, -10px) scale(1.05);
+      opacity: 0.8;
+    }
+    66% {
+      transform: translate(-10px, 15px) scale(0.95);
+      opacity: 0.7;
+    }
   }
   
-  .luxury-hero__button:hover .luxury-hero__button-arrow {
-    transform: translateX(3px);
+  @keyframes majatrivi-flow-2 {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.4;
+    }
+    50% {
+      transform: translate(-15px, 20px) scale(1.1);
+      opacity: 0.6;
+    }
   }
   
-  .luxury-hero__scroll-indicator {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    opacity: 0;
-    animation: fadeIn 1s ease-out 2s forwards;
-  }
-  
-  .luxury-hero__scroll-text {
-    font-size: 0.8rem;
-    font-weight: 300;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.8);
-  }
-  
-  .luxury-hero__scroll-arrow {
-    animation: bounce 2s infinite;
-  }
-  
-  @keyframes fadeInUp {
+  @keyframes majatrivi-title-reveal {
     to {
       opacity: 1;
       transform: translateY(0);
     }
   }
   
-  @keyframes fadeIn {
+  @keyframes majatrivi-subtitle-reveal {
     to {
       opacity: 1;
+      transform: translateY(0);
     }
   }
   
-  @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
+  @keyframes majatrivi-cta-reveal {
+    to {
+      opacity: 1;
       transform: translateY(0);
     }
-    40% {
-      transform: translateY(-5px);
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .majatrivi-hero__flowing-bg::before,
+    .majatrivi-hero__flowing-bg::after {
+      animation: none !important;
     }
-    60% {
-      transform: translateY(-3px);
+    
+    .majatrivi-hero__title,
+    .majatrivi-hero__subtitle,
+    .majatrivi-hero__cta {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+      animation: none !important;
+    }
+    
+    .majatrivi-hero__cta:hover {
+      transform: translateY(0) !important;
     }
   }
   
   @media (max-width: 768px) {
-    .luxury-hero {
+    .majatrivi-hero {
       min-height: 500px;
     }
     
-    .luxury-hero__content {
-      padding: 0 1rem;
+    .majatrivi-hero__content {
+      padding: 0 1.5rem;
     }
     
-    .luxury-hero__content-inner {
-      margin-bottom: 4rem;
+    .majatrivi-hero__subtitle {
+      margin-bottom: 3rem;
     }
     
-    .luxury-hero__heading {
-      margin-bottom: 1rem;
-    }
-    
-    .luxury-hero__subheading {
-      margin-bottom: 2rem;
-    }
-    
-    .luxury-hero__scroll-indicator {
-      bottom: 1rem;
+    .majatrivi-hero__cta {
+      padding: 0.8rem 2rem;
+      font-size: 0.85rem;
     }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "Luxury Hero Video",
+  "name": "MAJATRIVI Hero",
   "tag": "section",
-  "class": "luxury-hero-wrapper",
+  "class": "majatrivi-hero-wrapper",
   "settings": [
     {
       "type": "header",
-      "content": "Video Settings"
+      "content": "Video"
     },
     {
       "type": "url",
       "id": "video_url",
-      "label": "Video URL",
-      "info": "Use a high-quality MP4 video file. For best results, use 1920x1080 or 4K resolution."
+      "label": "Video URL"
     },
     {
       "type": "image_picker",
       "id": "fallback_image",
-      "label": "Fallback Image",
-      "info": "This image will be shown if video fails to load or on mobile devices."
+      "label": "Fallback Image"
     },
     {
       "type": "header",
@@ -339,20 +352,20 @@
     {
       "type": "text",
       "id": "heading",
-      "label": "Heading",
+      "label": "Brand Name",
       "default": "MAJATRIVI"
     },
     {
-      "type": "textarea",
+      "type": "text",
       "id": "subheading",
-      "label": "Subheading",
-      "default": "Luxury fashion redefined. Discover our exclusive collection of premium clothing crafted for the modern connoisseur."
+      "label": "Tagline",
+      "default": "Où la mode rencontre l'art contemporain"
     },
     {
       "type": "text",
       "id": "button_text",
       "label": "Button Text",
-      "default": "Explore Collection"
+      "default": "Découvrir"
     },
     {
       "type": "url",
@@ -362,7 +375,7 @@
     },
     {
       "type": "header",
-      "content": "Overlay Settings"
+      "content": "Overlay"
     },
     {
       "type": "checkbox",
@@ -375,22 +388,15 @@
       "id": "overlay_opacity",
       "label": "Overlay Opacity",
       "min": 0,
-      "max": 100,
+      "max": 60,
       "step": 5,
       "unit": "%",
-      "default": 40
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color Scheme",
-      "default": "scheme-1"
+      "default": 25
     }
   ],
   "presets": [
     {
-      "name": "Luxury Hero Video",
-      "category": "Video"
+      "name": "MAJATRIVI Hero"
     }
   ]
 }

@@ -61,33 +61,155 @@ body {
   }
 }
 
-/* Luxury Typography Classes */
+/* MAJATRIVI Enhanced Scroll Animations */
+.majatrivi-scroll-container {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+}
+
+.majatrivi-scroll-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* Parallax and Scroll Effects */
+.majatrivi-parallax {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.majatrivi-parallax-slow {
+  transform: translate3d(0, calc(var(--scroll-offset, 0) * 0.3), 0);
+}
+
+.majatrivi-parallax-medium {
+  transform: translate3d(0, calc(var(--scroll-offset, 0) * 0.5), 0);
+}
+
+.majatrivi-parallax-fast {
+  transform: translate3d(0, calc(var(--scroll-offset, 0) * 0.8), 0);
+}
+
+/* Section Transitions */
+.majatrivi-section-transition {
+  opacity: 0;
+  transform: translateY(100px);
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.majatrivi-section-transition.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Advanced Reveal Animations */
+.majatrivi-reveal {
+  overflow: hidden;
+}
+
+.majatrivi-reveal-text {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.majatrivi-reveal-text.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered Animations */
+.majatrivi-stagger-children > * {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.majatrivi-stagger-children.is-visible > *:nth-child(1) { 
+  transition-delay: 0.1s; 
+  opacity: 1; 
+  transform: translateY(0); 
+}
+
+.majatrivi-stagger-children.is-visible > *:nth-child(2) { 
+  transition-delay: 0.2s; 
+  opacity: 1; 
+  transform: translateY(0); 
+}
+
+.majatrivi-stagger-children.is-visible > *:nth-child(3) { 
+  transition-delay: 0.3s; 
+  opacity: 1; 
+  transform: translateY(0); 
+}
+
+.majatrivi-stagger-children.is-visible > *:nth-child(4) { 
+  transition-delay: 0.4s; 
+  opacity: 1; 
+  transform: translateY(0); 
+}
+
+.majatrivi-stagger-children.is-visible > *:nth-child(5) { 
+  transition-delay: 0.5s; 
+  opacity: 1; 
+  transform: translateY(0); 
+}
+
+.majatrivi-stagger-children.is-visible > *:nth-child(6) { 
+  transition-delay: 0.6s; 
+  opacity: 1; 
+  transform: translateY(0); 
+}
+
+/* Enhanced Luxury Typography System */
 .luxury-heading-xxl {
-  font-size: clamp(3rem, 8vw, 6rem);
-  font-weight: 200;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
+  font-size: clamp(3rem, 12vw, 8rem);
+  font-weight: 100;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  margin-bottom: clamp(2rem, 8vw, 6rem);
+  font-optical-sizing: auto;
 }
 
 .luxury-heading-xl {
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  font-weight: 300;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
+  font-size: clamp(2.5rem, 8vw, 5.5rem);
+  font-weight: 200;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: clamp(1.5rem, 6vw, 4rem);
 }
 
 .luxury-heading-lg {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 300;
-  letter-spacing: -0.01em;
-  line-height: 1.3;
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: clamp(1rem, 4vw, 3rem);
 }
 
 .luxury-heading-md {
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  font-weight: 400;
-  letter-spacing: -0.005em;
-  line-height: 1.4;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  margin-bottom: clamp(1rem, 3vw, 2rem);
+}
+
+/* Luxury display text with refined spacing */
+.luxury-heading-display {
+  font-size: clamp(4rem, 15vw, 10rem);
+  font-weight: 100;
+  letter-spacing: -0.05em;
+  line-height: 0.85;
+  margin-bottom: clamp(3rem, 10vw, 8rem);
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 60%, rgba(212, 175, 55, 0.8) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .luxury-text-lg {
@@ -117,7 +239,7 @@ body {
   opacity: 0.7;
 }
 
-/* Luxury Button Styles */
+/* MAJATRIVI Light Button Styles */
 .luxury-btn {
   display: inline-flex;
   align-items: center;
@@ -135,27 +257,91 @@ body {
   position: relative;
   overflow: hidden;
   cursor: pointer;
+  backdrop-filter: blur(10px);
 }
 
 .luxury-btn::before {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%;
+  left: 0;
   width: 100%;
   height: 100%;
-  background: currentColor;
-  transition: left var(--luxury-transition-medium);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  opacity: 0;
+  transition: opacity var(--luxury-transition-medium);
   z-index: -1;
 }
 
 .luxury-btn:hover::before {
-  left: 0;
+  opacity: 1;
 }
 
 .luxury-btn:hover {
-  color: var(--luxury-white);
-  background: currentColor;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+/* MAJATRIVI Hero Button - Ultra Light Animation */
+.majatrivi-hero-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  backdrop-filter: blur(20px);
+  border-radius: 2px;
+}
+
+.majatrivi-hero-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(212, 175, 55, 0.1) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  border-radius: 2px;
+}
+
+.majatrivi-hero-btn:hover::before {
+  opacity: 1;
+}
+
+.majatrivi-hero-btn:hover {
+  transform: translateY(-0.5px);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.majatrivi-hero-btn .btn-arrow {
+  transition: transform 0.3s ease;
+  opacity: 0.7;
+}
+
+.majatrivi-hero-btn:hover .btn-arrow {
+  transform: translateX(2px);
+  opacity: 1;
 }
 
 .luxury-btn--primary {
@@ -196,6 +382,191 @@ body {
 
 .luxury-btn--ghost:hover::before {
   width: 100%;
+}
+
+/* MAJATRIVI Flowing Background Animations */
+.majatrivi-flowing-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.majatrivi-flowing-bg::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.02) 0%,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.02) 50%,
+    rgba(255, 255, 255, 0.08) 75%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  animation: majatrivi-flow 20s ease-in-out infinite;
+}
+
+.majatrivi-flowing-bg::after {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -30%;
+  width: 150%;
+  height: 150%;
+  background: radial-gradient(
+    circle at center,
+    rgba(212, 175, 55, 0.03) 0%,
+    rgba(212, 175, 55, 0.01) 40%,
+    transparent 70%
+  );
+  animation: majatrivi-glow 15s ease-in-out infinite reverse;
+}
+
+@keyframes majatrivi-flow {
+  0%, 100% {
+    transform: translateX(-10px) translateY(-10px) rotate(0deg);
+    opacity: 0.7;
+  }
+  25% {
+    transform: translateX(10px) translateY(-5px) rotate(1deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(5px) translateY(10px) rotate(-0.5deg);
+    opacity: 0.8;
+  }
+  75% {
+    transform: translateX(-5px) translateY(5px) rotate(0.5deg);
+    opacity: 0.9;
+  }
+}
+
+@keyframes majatrivi-glow {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.1) rotate(180deg);
+    opacity: 0.7;
+  }
+}
+
+/* Hero Section Enhanced Background */
+.majatrivi-hero-enhanced {
+  position: relative;
+  overflow: hidden;
+}
+
+.majatrivi-hero-enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.05) 50%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+  animation: majatrivi-hero-breath 8s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes majatrivi-hero-breath {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+}
+
+/* ==========================================================================
+   MAJATRIVI Logo System Integration - Enhanced
+   ========================================================================== */
+
+/* Ensure header doesn't interfere with body padding */
+body {
+  padding-top: var(--header-height, 80px);
+  transition: padding-top 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-top: var(--header-height-mobile, 70px);
+  }
+}
+
+/* Logo system performance optimizations */
+.majatrivi-logo-letter,
+.majatrivi-m-symbol,
+.majatrivi-logo-full,
+.majatrivi-logo-minimal,
+.majatrivi-m-symbol__line {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+/* Page hidden state for performance */
+.page-hidden .majatrivi-logo-letter,
+.page-hidden .majatrivi-m-symbol,
+.page-hidden .majatrivi-m-symbol__line {
+  animation-play-state: paused;
+}
+
+/* Enhanced logo hover effects with luxury theme integration */
+.majatrivi-luxury-header__logo-link:hover {
+  filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.3));
+}
+
+.majatrivi-luxury-header.logo-focused .majatrivi-luxury-header__logo-link {
+  outline: 2px solid var(--luxury-gold);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Logo system color variations for different sections */
+.majatrivi-luxury-header--transparent {
+  --logo-color: rgba(255, 255, 255, 0.9);
+  --logo-hover-color: var(--luxury-gold);
+}
+
+.majatrivi-luxury-header:not(.majatrivi-luxury-header--transparent) {
+  --logo-color: var(--luxury-black);
+  --logo-hover-color: var(--luxury-gold);
+}
+
+/* Smooth header transitions */
+.majatrivi-luxury-header.logo-transitioning {
+  pointer-events: none;
+}
+
+.majatrivi-luxury-header.logo-transitioning * {
+  pointer-events: auto;
+}
+
+/* Enhanced visibility states */
+.majatrivi-luxury-header.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.majatrivi-luxury-header:not(.is-visible) {
+  opacity: 0.95;
+  transform: translateY(-5px);
 }
 
 /* Luxury Animation Classes */
@@ -411,6 +782,323 @@ a:focus {
   .luxury-hero,
   .luxury-hero-video {
     break-inside: avoid;
+  }
+}
+
+/* MAJATRIVI Section Flow Animations */
+.majatrivi-section-flow {
+  position: relative;
+  overflow: hidden;
+}
+
+.majatrivi-section-flow::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 200%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.02) 30%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.02) 70%,
+    transparent 100%
+  );
+  animation: majatrivi-section-breath 12s ease-in-out infinite;
+  z-index: 0;
+}
+
+@keyframes majatrivi-section-breath {
+  0%, 100% {
+    transform: translateY(0) scaleY(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(20px) scaleY(1.1);
+    opacity: 1;
+  }
+}
+
+/* Enhanced Text Reveal Animation */
+.majatrivi-text-reveal {
+  overflow: hidden;
+  position: relative;
+}
+
+.majatrivi-text-reveal .reveal-line {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.majatrivi-text-reveal.is-visible .reveal-line {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.majatrivi-text-reveal.is-visible .reveal-line:nth-child(1) { transition-delay: 0s; }
+.majatrivi-text-reveal.is-visible .reveal-line:nth-child(2) { transition-delay: 0.1s; }
+.majatrivi-text-reveal.is-visible .reveal-line:nth-child(3) { transition-delay: 0.2s; }
+.majatrivi-text-reveal.is-visible .reveal-line:nth-child(4) { transition-delay: 0.3s; }
+
+/* Luxury Floating Elements */
+.majatrivi-floating-element {
+  animation: majatrivi-float 6s ease-in-out infinite;
+}
+
+.majatrivi-floating-element--slow {
+  animation: majatrivi-float 8s ease-in-out infinite;
+}
+
+.majatrivi-floating-element--fast {
+  animation: majatrivi-float 4s ease-in-out infinite;
+}
+
+@keyframes majatrivi-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-5px) rotate(0.5deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-7px) rotate(-0.5deg);
+  }
+}
+
+/* Performance Optimizations */
+.majatrivi-flowing-bg,
+.majatrivi-hero-enhanced,
+.majatrivi-section-flow,
+.majatrivi-floating-element {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.majatrivi-flowing-bg::before,
+.majatrivi-flowing-bg::after {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
+
+/* GPU Acceleration for smooth animations */
+.majatrivi-hero-btn,
+.luxury-btn,
+.brand-element {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Reduced Motion Overrides */
+@media (prefers-reduced-motion: reduce) {
+  .majatrivi-flowing-bg::before,
+  .majatrivi-flowing-bg::after,
+  .majatrivi-hero-enhanced::before,
+  .majatrivi-section-flow::before,
+  .majatrivi-floating-element {
+    animation: none !important;
+  }
+  
+  .majatrivi-text-reveal .reveal-line {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    transition: none !important;
+  }
+  
+  .majatrivi-hero-btn:hover,
+  .luxury-btn:hover {
+    transform: translateZ(0) !important;
+  }
+}
+
+/* MAJATRIVI Header Integration */
+body {
+  padding-top: 80px; /* Match header height */
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-top: 70px; /* Mobile header height */
+  }
+}
+
+/* Ensure hero sections account for fixed header */
+.majatrivi-hero,
+.luxury-hero {
+  min-height: calc(100vh - 80px);
+}
+
+@media (max-width: 768px) {
+  .majatrivi-hero,
+  .luxury-hero {
+    min-height: calc(100vh - 70px);
+  }
+}
+
+/* Advanced Luxury Animations - GitHub Inspired */
+.luxury-reveal-mask {
+  background: linear-gradient(135deg, #000 0%, #000 50%, transparent 50%);
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: luxury-mask-reveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes luxury-mask-reveal {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+
+.luxury-fade-in-up {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: all 1200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.luxury-fade-in-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Luxury Card Hover with Depth */
+.luxury-card-premium {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.luxury-card-premium::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  z-index: -1;
+}
+
+.luxury-card-premium:hover {
+  transform: rotateX(2deg) rotateY(2deg) scale(1.02);
+}
+
+.luxury-card-premium:hover::after {
+  opacity: 1;
+}
+
+/* Enhanced Luxury Button System */
+.luxury-btn-premium {
+  position: relative;
+  padding: 16px 32px;
+  background: transparent;
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.luxury-btn-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.8s ease;
+}
+
+.luxury-btn-premium:hover::before {
+  left: 100%;
+}
+
+.luxury-btn-premium::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(212, 175, 55, 0.08);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.luxury-btn-premium:hover::after {
+  opacity: 1;
+}
+
+.luxury-btn-premium:hover {
+  transform: translateY(-1px);
+  border-color: rgba(212, 175, 55, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Luxury Glass Surface */
+.luxury-glass-surface {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Luxury Shadow System */
+.luxury-shadow-soft {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.luxury-shadow-medium {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.luxury-shadow-strong {
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+}
+
+.luxury-shadow-gold {
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+}
+
+/* Luxury Section Spacing */
+.luxury-section-premium {
+  padding: clamp(4rem, 12vw, 12rem) 0;
+  margin-bottom: clamp(2rem, 6vw, 8rem);
+}
+
+.luxury-content-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 clamp(2rem, 6vw, 8rem);
+}
+
+/* Advanced Color Variables */
+:root {
+  --luxury-gradient-subtle: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  --luxury-gradient-gold: linear-gradient(135deg, #d4af37 0%, #f4e4a6 100%);
+  --luxury-gradient-depth: linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 100%);
+  --luxury-shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --luxury-shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --luxury-shadow-strong: 0 15px 40px rgba(0, 0, 0, 0.18);
+  --luxury-shadow-gold: 0 4px 20px rgba(212, 175, 55, 0.3);
+}
+
+/* Container Queries for Luxury Responsive Design */
+@container (min-width: 768px) {
+  .luxury-responsive-container {
+    padding: clamp(2rem, 5vw, 4rem);
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
   }
 }
 

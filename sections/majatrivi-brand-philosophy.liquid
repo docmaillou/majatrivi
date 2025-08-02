@@ -1,0 +1,430 @@
+{% liquid
+  assign heading = section.settings.heading
+  assign subheading = section.settings.subheading
+  assign background_image = section.settings.background_image
+  assign overlay_opacity = section.settings.overlay_opacity
+  assign section_style = section.settings.section_style
+%}
+
+<section 
+  id="MajatriviBrandPhilosophy-{{ section.id }}" 
+  class="majatrivi-brand-philosophy majatrivi-brand-philosophy--{{ section_style }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="majatrivi-brand-philosophy__media">
+    {% if background_image != blank %}
+      <div class="majatrivi-brand-philosophy__image-wrapper">
+        {{ background_image | image_url: width: 2000 | image_tag: 
+          class: 'majatrivi-brand-philosophy__image',
+          sizes: '100vw',
+          widths: '800, 1200, 1600, 2000',
+          loading: 'lazy'
+        }}
+      </div>
+    {% else %}
+      <div class="majatrivi-brand-philosophy__gradient"></div>
+    {% endif %}
+    
+    {% if overlay_opacity > 0 %}
+      <div class="majatrivi-brand-philosophy__overlay" style="opacity: {{ overlay_opacity | divided_by: 100.0 }}"></div>
+    {% endif %}
+  </div>
+  
+  <div class="majatrivi-brand-philosophy__content">
+    <div class="majatrivi-brand-philosophy__content-inner">
+      {% if subheading != blank %}
+        <p class="majatrivi-brand-philosophy__subheading luxury-eyebrow luxury-fade-in">{{ subheading }}</p>
+      {% endif %}
+      
+      {% if heading != blank %}
+        <h2 class="majatrivi-brand-philosophy__heading luxury-heading-lg luxury-fade-in">{{ heading }}</h2>
+      {% endif %}
+      
+      <div class="majatrivi-brand-philosophy__values">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'philosophy_item' %}
+              <div class="majatrivi-brand-philosophy__value luxury-fade-in" {{ block.shopify_attributes }}>
+                {% if block.settings.icon != blank %}
+                  <div class="majatrivi-brand-philosophy__value-icon">
+                    {{ block.settings.icon | image_url: width: 60 | image_tag: loading: 'lazy' }}
+                  </div>
+                {% endif %}
+                
+                {% if block.settings.title != blank %}
+                  <h3 class="majatrivi-brand-philosophy__value-title">{{ block.settings.title }}</h3>
+                {% endif %}
+                
+                {% if block.settings.description != blank %}
+                  <p class="majatrivi-brand-philosophy__value-description">{{ block.settings.description }}</p>
+                {% endif %}
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .majatrivi-brand-philosophy {
+    position: relative;
+    height: 100vh;
+    min-height: 700px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #f8f8f8;
+  }
+  
+  .majatrivi-brand-philosophy__media {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+  
+  .majatrivi-brand-philosophy__image-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+  
+  .majatrivi-brand-philosophy__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: grayscale(20%) contrast(1.1);
+  }
+  
+  .majatrivi-brand-philosophy__gradient {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      #f8f8f8 0%,
+      #ffffff 25%,
+      #f0f0f0 50%,
+      #e8e8e8 75%,
+      #f8f8f8 100%
+    );
+  }
+  
+  .majatrivi-brand-philosophy__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 2;
+  }
+  
+  .majatrivi-brand-philosophy__content {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    text-align: center;
+  }
+  
+  .majatrivi-brand-philosophy__content-inner {
+    max-width: 100%;
+  }
+  
+  .majatrivi-brand-philosophy__subheading {
+    margin: 0 0 1.5rem 0;
+    color: #666;
+  }
+  
+  .majatrivi-brand-philosophy__heading {
+    margin: 0 0 4rem 0;
+    color: #0a0a0a;
+    text-align: center;
+  }
+  
+  .majatrivi-brand-philosophy__values {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 3rem;
+    margin-top: 3rem;
+  }
+  
+  .majatrivi-brand-philosophy__value {
+    text-align: center;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  
+  .majatrivi-brand-philosophy__value.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .majatrivi-brand-philosophy__value-icon {
+    margin: 0 auto 1.5rem auto;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .majatrivi-brand-philosophy__value-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0.8;
+  }
+  
+  .majatrivi-brand-philosophy__value-title {
+    margin: 0 0 1rem 0;
+    font-size: 1.3rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: #0a0a0a;
+    text-transform: uppercase;
+  }
+  
+  .majatrivi-brand-philosophy__value-description {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: #666;
+    max-width: 280px;
+    margin: 0 auto;
+  }
+  
+  /* Style Variations */
+  .majatrivi-brand-philosophy--dark {
+    background: #0a0a0a;
+  }
+  
+  .majatrivi-brand-philosophy--dark .majatrivi-brand-philosophy__gradient {
+    background: linear-gradient(
+      135deg,
+      #0a0a0a 0%,
+      #1a1a1a 25%,
+      #2d2d2d 50%,
+      #1a1a1a 75%,
+      #0a0a0a 100%
+    );
+  }
+  
+  .majatrivi-brand-philosophy--dark .majatrivi-brand-philosophy__overlay {
+    background: rgba(0, 0, 0, 0.3);
+  }
+  
+  .majatrivi-brand-philosophy--dark .majatrivi-brand-philosophy__subheading {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .majatrivi-brand-philosophy--dark .majatrivi-brand-philosophy__heading {
+    color: #ffffff;
+  }
+  
+  .majatrivi-brand-philosophy--dark .majatrivi-brand-philosophy__value-title {
+    color: #ffffff;
+  }
+  
+  .majatrivi-brand-philosophy--dark .majatrivi-brand-philosophy__value-description {
+    color: rgba(255, 255, 255, 0.8);
+  }
+  
+  .majatrivi-brand-philosophy--minimal {
+    background: #ffffff;
+    min-height: 80vh;
+  }
+  
+  .majatrivi-brand-philosophy--minimal .majatrivi-brand-philosophy__media {
+    display: none;
+  }
+  
+  .majatrivi-brand-philosophy--minimal .majatrivi-brand-philosophy__content {
+    padding: 4rem 2rem;
+  }
+  
+  .majatrivi-brand-philosophy--minimal .majatrivi-brand-philosophy__values {
+    gap: 4rem;
+  }
+  
+  .majatrivi-brand-philosophy--minimal .majatrivi-brand-philosophy__value-icon {
+    width: 80px;
+    height: 80px;
+    background: #f8f8f8;
+    border-radius: 50%;
+    margin-bottom: 2rem;
+  }
+  
+  /* Staggered animation */
+  .majatrivi-brand-philosophy__value:nth-child(1) { animation-delay: 0.1s; }
+  .majatrivi-brand-philosophy__value:nth-child(2) { animation-delay: 0.2s; }
+  .majatrivi-brand-philosophy__value:nth-child(3) { animation-delay: 0.3s; }
+  .majatrivi-brand-philosophy__value:nth-child(4) { animation-delay: 0.4s; }
+  .majatrivi-brand-philosophy__value:nth-child(5) { animation-delay: 0.5s; }
+  .majatrivi-brand-philosophy__value:nth-child(6) { animation-delay: 0.6s; }
+  
+  @media (max-width: 768px) {
+    .majatrivi-brand-philosophy {
+      min-height: 90vh;
+    }
+    
+    .majatrivi-brand-philosophy__content {
+      padding: 0 1rem;
+    }
+    
+    .majatrivi-brand-philosophy__values {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      margin-top: 2rem;
+    }
+    
+    .majatrivi-brand-philosophy__heading {
+      margin-bottom: 3rem;
+    }
+    
+    .majatrivi-brand-philosophy--minimal .majatrivi-brand-philosophy__content {
+      padding: 3rem 1rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .majatrivi-brand-philosophy__values {
+      gap: 2rem;
+    }
+    
+    .majatrivi-brand-philosophy__value-description {
+      max-width: 100%;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Brand Philosophy",
+  "tag": "section",
+  "class": "majatrivi-brand-philosophy-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Our Values"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What We Stand For"
+    },
+    {
+      "type": "header",
+      "content": "Visual Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image",
+      "info": "Optional. Leave empty for gradient background"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay Opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 60,
+      "info": "Lightens/darkens the background for text readability"
+    },
+    {
+      "type": "select",
+      "id": "section_style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "light",
+          "label": "Light"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        },
+        {
+          "value": "minimal",
+          "label": "Minimal (No Background)"
+        }
+      ],
+      "default": "light"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "philosophy_item",
+      "name": "Philosophy Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon",
+          "info": "60x60px recommended"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Sustainability"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "We are committed to ethical practices and sustainable production methods that respect both people and planet."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Philosophy",
+      "category": "Text",
+      "blocks": [
+        {
+          "type": "philosophy_item",
+          "settings": {
+            "title": "Sustainability",
+            "description": "We are committed to ethical practices and sustainable production methods that respect both people and planet."
+          }
+        },
+        {
+          "type": "philosophy_item",
+          "settings": {
+            "title": "Craftsmanship",
+            "description": "Every piece is meticulously crafted by skilled artisans who bring decades of experience to their work."
+          }
+        },
+        {
+          "type": "philosophy_item",
+          "settings": {
+            "title": "Innovation",
+            "description": "We constantly push boundaries, blending traditional techniques with cutting-edge design and materials."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
