@@ -90,7 +90,6 @@
     <!-- Scroll hint with gentle animation -->
     <div class="majatrivi-hero__scroll-hint" data-scroll-hint>
       <div class="scroll-hint__line"></div>
-      <span class="scroll-hint__text">{{ 'sections.hero.scroll_hint' | t }}</span>
     </div>
   </div>
 </section>
@@ -409,16 +408,25 @@
                 0 0 20px rgba(212, 175, 55, 0.1);
   }
   
-  /* Add luxury arrow icon */
+  /* Subtle right border accent on hover */
   .majatrivi-hero__cta::after {
-    content: '→';
-    font-size: 1rem;
-    transition: transform 0.3s ease;
-    opacity: 0.8;
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 2px;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(212, 175, 55, 0.6),
+      transparent
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
   
   .majatrivi-hero__cta:hover::after {
-    transform: translateX(4px);
     opacity: 1;
   }
   
