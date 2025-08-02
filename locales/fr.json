@@ -262,6 +262,12 @@
   "fields": {
     "separator": "à"
   },
+  "sections": {
+    "hero": {
+      "loading": "Préparation de la magie...",
+      "scroll_hint": "Défiler"
+    }
+  },
   "blogs": {
     "article": {
       "comment_author_separator": "•",

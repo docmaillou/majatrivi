@@ -11,8 +11,9 @@
 
 <section 
   id="MajatriviHero-{{ section.id }}" 
-  class="majatrivi-hero"
+  class="majatrivi-hero majatrivi-hero-enhanced"
   data-section-id="{{ section.id }}"
+  data-whimsy-hero
 >
   <div class="majatrivi-hero__media">
     {% if video_url != blank %}
@@ -22,10 +23,23 @@
         muted 
         loop 
         playsinline
-        preload="metadata"
+        preload="auto"
+        onloadstart="this.volume=0"
+        oncanplay="this.classList.add('loaded')"
         poster="{% if fallback_image != blank %}{{ fallback_image | image_url: width: 1920 }}{% endif %}"
       >
         <source src="{{ video_url }}" type="video/mp4">
+        <!-- Video interaction overlay -->
+        <div class="majatrivi-hero__video-overlay" data-video-control>
+          <div class="majatrivi-hero__play-pause-indicator">
+            <svg class="play-icon" width="48" height="48" viewBox="0 0 24 24" fill="none">
+              <path d="M8 5v14l11-7z" fill="currentColor"/>
+            </svg>
+            <svg class="pause-icon" width="48" height="48" viewBox="0 0 24 24" fill="none">
+              <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" fill="currentColor"/>
+            </svg>
+          </div>
+        </div>
         {% if fallback_image != blank %}
           {{ fallback_image | image_url: width: 1920 | image_tag: class: 'majatrivi-hero__fallback' }}
         {% endif %}
@@ -35,11 +49,27 @@
     {% endif %}
     
     {% if show_overlay %}
-      <div class="majatrivi-hero__overlay" style="opacity: {{ overlay_opacity | divided_by: 100.0 }}"></div>
+      <div class="majatrivi-hero__overlay"></div>
     {% endif %}
   </div>
   
   <div class="majatrivi-hero__flowing-bg"></div>
+  
+  <!-- Magical floating particles -->
+  <div class="majatrivi-hero__particles" data-particles></div>
+  
+  <!-- Cursor follower -->
+  <div class="majatrivi-hero__cursor-glow" data-cursor-glow></div>
+  
+  <!-- Loading state -->
+  <div class="majatrivi-hero__loading" data-hero-loading>
+    <div class="majatrivi-hero__loading-dots">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <p class="majatrivi-hero__loading-text">{{ 'sections.hero.loading' | t }}</p>
+  </div>
   
   <div class="majatrivi-hero__content">
     {% if heading != blank %}
@@ -51,23 +81,48 @@
     {% endif %}
     
     {% if button_text != blank and button_link != blank %}
-      <a href="{{ button_link }}" class="majatrivi-hero__cta luxury-btn-premium">
-        {{ button_text }}
+      <a href="{{ button_link }}" class="majatrivi-hero__cta luxury-btn-premium" data-magnetic-btn>
+        <span class="btn-text">{{ button_text }}</span>
+        <span class="btn-shimmer"></span>
       </a>
     {% endif %}
+    
+    <!-- Scroll hint with gentle animation -->
+    <div class="majatrivi-hero__scroll-hint" data-scroll-hint>
+      <div class="scroll-hint__line"></div>
+      <span class="scroll-hint__text">{{ 'sections.hero.scroll_hint' | t }}</span>
+    </div>
   </div>
 </section>
 
 {% stylesheet %}
+  /* Dynamic CSS Custom Properties */
+  .majatrivi-hero {
+    --overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+    --header-height: 80px;
+    --header-height-mobile: 70px;
+  }
+  
+  @media (max-width: 768px) {
+    .majatrivi-hero {
+      --header-height: var(--header-height-mobile);
+    }
+  }
   .majatrivi-hero {
     position: relative;
     height: 100vh;
-    min-height: 600px;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     background: #000;
+    /* Remove default body padding for true full-screen */
+    margin-top: calc(-1 * var(--header-height, 80px));
+    padding-top: var(--header-height, 80px);
+    /* Ensure it's truly full-screen */
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
   }
   
   .majatrivi-hero__media {
@@ -86,6 +141,84 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
+    /* Optimize video performance */
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+  
+  /* Enhanced video loading and quality */
+  .majatrivi-hero__video {
+    /* Ensure smooth playback */
+    -webkit-playsinline: true;
+    /* Better quality on high DPI displays */
+    image-rendering: high-quality;
+    /* Loading state */
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+  
+  .majatrivi-hero__video.loaded {
+    opacity: 1;
+  }
+  
+  /* Subtle parallax effect for video */
+  @media (min-width: 1024px) {
+    .majatrivi-hero__video {
+      transform: translateZ(0) scale(1.05);
+      transition: transform 0.3s ease-out, opacity 1s ease-in-out;
+    }
+    
+    .majatrivi-hero:hover .majatrivi-hero__video {
+      transform: translateZ(0) scale(1.02);
+    }
+  }
+  
+  /* Video interaction overlay */
+  .majatrivi-hero__video-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background: rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+  }
+  
+  .majatrivi-hero__video-overlay:hover {
+    background: rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  
+  .majatrivi-hero__play-pause-indicator {
+    position: relative;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .majatrivi-hero__play-pause-indicator svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: white;
+    transition: all 0.2s ease;
+  }
+  
+  .play-icon {
+    transform: translateX(2px); /* Center the play triangle */
   }
   
   .majatrivi-hero__overlay {
@@ -94,8 +227,25 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.4) 100%);
+    background: linear-gradient(
+      135deg, 
+      rgba(0, 0, 0, 0.4) 0%, 
+      rgba(0, 0, 0, 0.1) 30%,
+      rgba(0, 0, 0, 0.2) 70%,
+      rgba(0, 0, 0, 0.5) 100%
+    );
     z-index: 2;
+    /* Subtle breathing animation for depth */
+    animation: overlay-breath 8s ease-in-out infinite;
+  }
+  
+  @keyframes overlay-breath {
+    0%, 100% {
+      opacity: var(--overlay-opacity, 0.15);
+    }
+    50% {
+      opacity: calc(var(--overlay-opacity, 0.15) * 1.2);
+    }
   }
   
   .majatrivi-hero__flowing-bg {
@@ -150,11 +300,13 @@
     z-index: 4;
     text-align: center;
     color: #fff;
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 clamp(2rem, 8vw, 6rem);
     opacity: 0;
     pointer-events: none;
+    /* Ensure content is centered accounting for header */
+    transform: translateY(calc(var(--header-height, 80px) / -2));
   }
   
   .majatrivi-hero__content:has(.majatrivi-hero__title:not(:empty)),
@@ -165,56 +317,73 @@
   }
   
   .majatrivi-hero__title {
-    font-size: clamp(4rem, 10vw, 8rem);
-    font-weight: 200;
-    letter-spacing: -0.02em;
-    line-height: 0.85;
-    margin: 0 0 2rem 0;
+    font-size: clamp(3.5rem, 12vw, 9rem);
+    font-weight: 100;
+    letter-spacing: -0.03em;
+    line-height: 0.8;
+    margin: 0 0 clamp(2rem, 6vw, 4rem) 0;
     text-transform: uppercase;
-    background: linear-gradient(135deg, #ffffff 0%, #ffffff 60%, rgba(212, 175, 55, 0.9) 100%);
+    background: linear-gradient(
+      135deg, 
+      #ffffff 0%, 
+      #ffffff 40%,
+      rgba(212, 175, 55, 0.95) 70%,
+      rgba(212, 175, 55, 1) 100%
+    );
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     opacity: 0;
-    transform: translateY(40px);
-    animation: majatrivi-title-reveal 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
+    transform: translateY(60px) scale(0.95);
+    animation: majatrivi-title-reveal 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s forwards;
+    /* Enhanced text rendering */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   
   .majatrivi-hero__subtitle {
-    font-size: clamp(1rem, 2vw, 1.2rem);
-    font-weight: 300;
-    line-height: 1.6;
-    margin: 0 0 4rem 0;
-    max-width: 500px;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-weight: 200;
+    line-height: 1.7;
+    margin: 0 0 clamp(3rem, 8vw, 6rem) 0;
+    max-width: 600px;
     margin-left: auto;
     margin-right: auto;
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.9);
     opacity: 0;
-    transform: translateY(30px);
-    animation: majatrivi-subtitle-reveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s forwards;
+    transform: translateY(40px);
+    animation: majatrivi-subtitle-reveal 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.5s forwards;
+    /* Enhanced typography */
+    font-optical-sizing: auto;
+    letter-spacing: 0.02em;
   }
   
   .majatrivi-hero__cta {
-    display: inline-block;
-    padding: 1rem 2.5rem;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.2rem 3rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     color: #fff;
     text-decoration: none;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 300;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(30px) saturate(150%);
     border-radius: 2px;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: relative;
     overflow: hidden;
     opacity: 0;
-    transform: translateY(20px);
-    animation: majatrivi-cta-reveal 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.5s forwards;
+    transform: translateY(30px) scale(0.95);
+    animation: majatrivi-cta-reveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 2.2s forwards;
     will-change: transform;
     backface-visibility: hidden;
+    /* Enhanced glass effect */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   }
   
   .majatrivi-hero__cta::before {
@@ -233,10 +402,24 @@
   }
   
   .majatrivi-hero__cta:hover {
-    transform: translateY(-1px);
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px) scale(1.02);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(212, 175, 55, 0.4);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2), 
+                0 0 20px rgba(212, 175, 55, 0.1);
+  }
+  
+  /* Add luxury arrow icon */
+  .majatrivi-hero__cta::after {
+    content: '→';
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+    opacity: 0.8;
+  }
+  
+  .majatrivi-hero__cta:hover::after {
+    transform: translateX(4px);
+    opacity: 1;
   }
   
   @keyframes majatrivi-flow-1 {
@@ -268,7 +451,7 @@
   @keyframes majatrivi-title-reveal {
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
     }
   }
   
@@ -282,13 +465,337 @@
   @keyframes majatrivi-cta-reveal {
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
+    }
+  }
+  
+  /* ==========================================================================
+     MAGICAL ENHANCEMENTS - Whimsy & Delight
+     ========================================================================== */
+  
+  /* Floating Particles System */
+  .majatrivi-hero__particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+  
+  .majatrivi-hero__particles::before,
+  .majatrivi-hero__particles::after {
+    content: '';
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: rgba(212, 175, 55, 0.7);
+    border-radius: 50%;
+    box-shadow: 
+      0 0 6px rgba(212, 175, 55, 0.5),
+      0 0 12px rgba(212, 175, 55, 0.3);
+    animation: majatrivi-particle-float 8s infinite ease-in-out;
+    will-change: transform, opacity;
+  }
+  
+  .majatrivi-hero__particles::before {
+    top: 20%;
+    left: 15%;
+    animation-delay: -2s;
+    animation-duration: 10s;
+  }
+  
+  .majatrivi-hero__particles::after {
+    top: 60%;
+    right: 20%;
+    animation-delay: -5s;
+    animation-duration: 12s;
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: 
+      0 0 6px rgba(255, 255, 255, 0.4),
+      0 0 12px rgba(255, 255, 255, 0.2);
+  }
+  
+  @keyframes majatrivi-particle-float {
+    0%, 100% {
+      transform: translateY(0px) translateX(0px) scale(1);
+      opacity: 0.6;
+    }
+    25% {
+      transform: translateY(-30px) translateX(15px) scale(1.2);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(-10px) translateX(-10px) scale(0.8);
+      opacity: 0.8;
+    }
+    75% {
+      transform: translateY(-40px) translateX(5px) scale(1.1);
+      opacity: 0.9;
+    }
+  }
+  
+  /* Cursor Glow Effect */
+  .majatrivi-hero__cursor-glow {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(
+      circle,
+      rgba(212, 175, 55, 0.15) 0%,
+      rgba(212, 175, 55, 0.05) 40%,
+      transparent 70%
+    );
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    will-change: transform, opacity;
+  }
+  
+  .majatrivi-hero:hover .majatrivi-hero__cursor-glow {
+    opacity: 1;
+  }
+  
+  /* Loading Animation */
+  .majatrivi-hero__loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    text-align: center;
+    color: white;
+    opacity: 1;
+    transition: opacity 0.6s ease;
+  }
+  
+  .majatrivi-hero__loading.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  .majatrivi-hero__loading-dots {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  
+  .majatrivi-hero__loading-dots span {
+    width: 8px;
+    height: 8px;
+    background: rgba(212, 175, 55, 0.8);
+    border-radius: 50%;
+    animation: majatrivi-loading-bounce 1.4s infinite ease-in-out;
+  }
+  
+  .majatrivi-hero__loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+  .majatrivi-hero__loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+  .majatrivi-hero__loading-dots span:nth-child(3) { animation-delay: 0s; }
+  
+  @keyframes majatrivi-loading-bounce {
+    0%, 80%, 100% {
+      transform: scale(0.8);
+      opacity: 0.5;
+    }
+    40% {
+      transform: scale(1.2);
+      opacity: 1;
+    }
+  }
+  
+  .majatrivi-hero__loading-text {
+    font-size: 0.85rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.8;
+    margin: 0;
+  }
+  
+  /* Video Control Overlay */
+  .majatrivi-hero__video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  
+  .majatrivi-hero__video:hover + .majatrivi-hero__video-overlay,
+  .majatrivi-hero__video-overlay:hover {
+    opacity: 1;
+  }
+  
+  .majatrivi-hero__play-pause-indicator {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    transform: scale(0.8);
+  }
+  
+  .majatrivi-hero__video-overlay:hover .majatrivi-hero__play-pause-indicator {
+    transform: scale(1);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(212, 175, 55, 0.6);
+  }
+  
+  .majatrivi-hero__play-pause-indicator svg {
+    color: rgba(255, 255, 255, 0.9);
+    transition: color 0.3s ease;
+  }
+  
+  .majatrivi-hero__video-overlay:hover .majatrivi-hero__play-pause-indicator svg {
+    color: rgba(212, 175, 55, 0.9);
+  }
+  
+  .pause-icon {
+    display: none;
+  }
+  
+  .video-playing .play-icon {
+    display: none;
+  }
+  
+  .video-playing .pause-icon {
+    display: block;
+  }
+  
+  /* Enhanced Button with Magnetic Effect */
+  .majatrivi-hero__cta .btn-shimmer {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg, 
+      transparent, 
+      rgba(255, 255, 255, 0.2), 
+      transparent
+    );
+    transition: left 0.8s ease;
+    pointer-events: none;
+  }
+  
+  .majatrivi-hero__cta:hover .btn-shimmer {
+    left: 100%;
+  }
+  
+  /* Scroll Hint */
+  .majatrivi-hero__scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 4;
+    opacity: 0.7;
+    animation: majatrivi-scroll-hint-float 3s ease-in-out infinite;
+  }
+  
+  .scroll-hint__line {
+    width: 1px;
+    height: 30px;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(255, 255, 255, 0.6),
+      transparent
+    );
+    position: relative;
+  }
+  
+  .scroll-hint__line::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 3px;
+    background: rgba(212, 175, 55, 0.8);
+    border-radius: 50%;
+    animation: majatrivi-scroll-dot 2s ease-in-out infinite;
+  }
+  
+  .scroll-hint__text {
+    font-size: 0.75rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+  
+  @keyframes majatrivi-scroll-hint-float {
+    0%, 100% {
+      transform: translateX(-50%) translateY(0px);
+    }
+    50% {
+      transform: translateX(-50%) translateY(-8px);
+    }
+  }
+  
+  @keyframes majatrivi-scroll-dot {
+    0%, 100% {
+      transform: translateX(-50%) translateY(0px);
+      opacity: 0.4;
+    }
+    50% {
+      transform: translateX(-50%) translateY(20px);
+      opacity: 1;
+    }
+  }
+  
+  /* Page Load Animation Enhancement */
+  .majatrivi-hero-enhanced {
+    opacity: 0;
+    animation: majatrivi-hero-entrance 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
+  }
+  
+  @keyframes majatrivi-hero-entrance {
+    0% {
+      opacity: 0;
+      transform: scale(1.02);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
     }
   }
   
   @media (prefers-reduced-motion: reduce) {
     .majatrivi-hero__flowing-bg::before,
-    .majatrivi-hero__flowing-bg::after {
+    .majatrivi-hero__flowing-bg::after,
+    .majatrivi-hero__particles::before,
+    .majatrivi-hero__particles::after,
+    .majatrivi-hero__scroll-hint,
+    .scroll-hint__line::after {
       animation: none !important;
     }
     
@@ -301,26 +808,69 @@
     }
     
     .majatrivi-hero__cta:hover {
-      transform: translateY(0) !important;
+      transform: translateY(0) scale(1) !important;
+    }
+    
+    .majatrivi-hero-enhanced {
+      opacity: 1 !important;
+      animation: none !important;
     }
   }
   
   @media (max-width: 768px) {
     .majatrivi-hero {
-      min-height: 500px;
+      min-height: 100vh;
+      /* Adjust for mobile header */
+      margin-top: calc(-1 * var(--header-height-mobile, 70px));
+      padding-top: var(--header-height-mobile, 70px);
     }
     
     .majatrivi-hero__content {
-      padding: 0 1.5rem;
+      padding: 0 clamp(1.5rem, 6vw, 3rem);
+      /* Better mobile content positioning */
+      transform: translateY(calc(var(--header-height-mobile, 70px) / -2));
     }
     
     .majatrivi-hero__subtitle {
-      margin-bottom: 3rem;
+      margin-bottom: clamp(2.5rem, 6vw, 4rem);
     }
     
     .majatrivi-hero__cta {
-      padding: 0.8rem 2rem;
-      font-size: 0.85rem;
+      padding: 1rem 2.5rem;
+      font-size: 0.8rem;
+      gap: 0.5rem;
+    }
+    
+    .majatrivi-hero__cursor-glow {
+      display: none;
+    }
+    
+    .majatrivi-hero__scroll-hint {
+      bottom: 1rem;
+    }
+    
+    .scroll-hint__text {
+      writing-mode: horizontal-tb;
+      text-orientation: initial;
+    }
+    
+    /* Optimize mobile video performance */
+    .majatrivi-hero__video {
+      /* Better mobile video handling */
+      -webkit-playsinline: true;
+      object-position: center;
+    }
+    
+    /* Adjust video overlay for mobile */
+    .majatrivi-hero__video-overlay {
+      width: 60px;
+      height: 60px;
+      opacity: 0.7;
+    }
+    
+    .majatrivi-hero__play-pause-indicator {
+      width: 20px;
+      height: 20px;
     }
   }
 {% endstylesheet %}

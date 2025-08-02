@@ -497,14 +497,19 @@ body {
    MAJATRIVI Logo System Integration - Enhanced
    ========================================================================== */
 
-/* Ensure header doesn't interfere with body padding */
+/* Full-screen hero - no body padding needed with transparent header */
 body {
-  padding-top: var(--header-height, 80px);
+  padding-top: 0;
   transition: padding-top 0.3s ease;
 }
 
+/* Add padding only to content sections after hero */
+.main-content:not(.has-hero) {
+  padding-top: var(--header-height, 80px);
+}
+
 @media (max-width: 768px) {
-  body {
+  .main-content:not(.has-hero) {
     padding-top: var(--header-height-mobile, 70px);
   }
 }

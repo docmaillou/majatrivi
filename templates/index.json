@@ -1,19 +1,27 @@
 {
   "sections": {
+    "majatrivi_luxury_header": {
+      "type": "majatrivi-luxury-header",
+      "settings": {
+        "transparent_header": true
+      }
+    },
     "majatrivi_hero_video": {
       "type": "luxury-hero-video",
       "settings": {
         "video_url": "https://cdn.shopify.com/videos/c/o/v/fbb140fd46e3429eba459e1549dbbe38.mp4",
-        "heading": "",
-        "subheading": "",
-        "button_text": "",
+        "heading": "MAJATRIVI",
+        "subheading": "Où la mode rencontre l'art contemporain",
+        "button_text": "Découvrir la Collection",
+        "button_link": "/collections/all",
         "show_overlay": true,
-        "overlay_opacity": 15,
+        "overlay_opacity": 20,
         "color_scheme": "scheme-1"
       }
     }
   },
   "order": [
+    "majatrivi_luxury_header",
     "majatrivi_hero_video"
   ]
 }
